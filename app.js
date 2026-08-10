@@ -1230,19 +1230,18 @@ function validateNrn(val) {
 function setupDocumentUpload() {
   const uploadArea = document.getElementById('doc-upload-area');
   const uploader = document.getElementById('file-uploader');
+  if (!uploader || !uploadArea) return;
   
-  uploadArea.addEventListener('click', () => uploader.click());
-  
-  uploadArea.addEventListener('dragover', (e) => {
+  uploader.addEventListener('dragover', (e) => {
     e.preventDefault();
     uploadArea.style.borderColor = 'var(--td-green)';
   });
   
-  uploadArea.addEventListener('dragleave', () => {
+  uploader.addEventListener('dragleave', () => {
     uploadArea.style.borderColor = 'var(--border-color)';
   });
   
-  uploadArea.addEventListener('drop', (e) => {
+  uploader.addEventListener('drop', (e) => {
     e.preventDefault();
     uploadArea.style.borderColor = 'var(--border-color)';
     if (e.dataTransfer.files.length > 0) {

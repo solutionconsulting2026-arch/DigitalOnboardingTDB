@@ -339,13 +339,13 @@
                   </div>
                 </div>
                 
-                <div class="upload-drag-area" id="doc-upload-area">
+                <div class="upload-drag-area" id="doc-upload-area" style="position: relative; overflow: hidden;">
                   <div class="upload-graphic">📂</div>
                   <div class="upload-texts">
                     <p class="upload-main-text" data-translate="upload_drag_lbl">Upload front & back files</p>
                     <p class="upload-sub-text" data-translate="upload_hint_lbl">Drag & drop PNG/PDF up to 10MB</p>
                   </div>
-                  <input type="file" id="file-uploader" style="position: absolute; width: 0; height: 0; opacity: 0; overflow: hidden; pointer-events: none;" multiple>
+                  <input type="file" id="file-uploader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;" multiple>
                 </div>
                 
                 <div class="uploaded-files-list hidden" id="files-list"></div>
