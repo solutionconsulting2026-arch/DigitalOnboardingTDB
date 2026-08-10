@@ -345,7 +345,7 @@
                     <p class="upload-main-text" data-translate="upload_drag_lbl">Upload front & back files</p>
                     <p class="upload-sub-text" data-translate="upload_hint_lbl">Drag & drop PNG/PDF up to 10MB</p>
                   </div>
-                  <input type="file" id="file-uploader" class="hidden" multiple>
+                  <input type="file" id="file-uploader" style="position: absolute; width: 0; height: 0; opacity: 0; overflow: hidden; pointer-events: none;" multiple>
                 </div>
                 
                 <div class="uploaded-files-list hidden" id="files-list"></div>
