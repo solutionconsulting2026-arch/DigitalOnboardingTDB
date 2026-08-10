@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextBank Staff Loan Digital Journey (RBI Compliant)</title>
+  <!-- Google Fonts: Inter for banking UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* NextBank Corporate India Palette */
+      --navy-dark: #0f172a;
+      --navy-medium: #1e293b;
+      --navy-light: #334155;
+      
+      --brand-primary: #0284c7; /* Sky blue */
+      --brand-hover: #0369a1;
+      
+      --emerald-accent: #10b981; /* Success */
+      --amber-accent: #f59e0b; /* Alert/Pending */
+      --crimson-accent: #ef4444; /* Critical */
+      
+      --pink-highlight: #ec008c; /* BusinessNext Pink */
+      
+      /* Grays & Neutrals */
+      --bg-slate: #f8fafc;
+      --border-gray: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+      
+      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-stack);
+      background-color: var(--bg-slate);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scrollbars styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    /* ==========================================
+       UTILITY CLASSES
+       ========================================== */
+    .hidden { display: none !important; }
+    .text-emerald { color: var(--emerald-accent) !important; }
+    .text-amber { color: var(--amber-accent) !important; }
+    .text-crimson { color: var(--crimson-accent) !important; }
+    .bg-emerald-light { background-color: rgba(16, 185, 129, 0.08) !important; }
+    .bg-amber-light { background-color: rgba(245, 158, 11, 0.08) !important; }
+    .bg-crimson-light { background-color: rgba(239, 68, 68, 0.08) !important; }
+    
+    /* RBI Badges */
+    .rbi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--navy-light);
+      color: var(--navy-dark);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-family: var(--font-stack);
+    }
+
+    .rbi-badge.rbi-critical {
+      background-color: rgba(239, 68, 68, 0.05);
+      border-color: var(--crimson-accent);
+      color: var(--crimson-accent);
+    }
+    
+    .rbi-badge.rbi-warning {
+      background-color: rgba(245, 158, 11, 0.05);
+      border-color: var(--amber-accent);
+      color: var(--amber-accent);
+    }
+
+    .rbi-badge.rbi-success {
+      background-color: rgba(16, 185, 129, 0.05);
+      border-color: var(--emerald-accent);
+      color: var(--emerald-accent);
+    }
+
+    /* ==========================================
+       STICKY HEADER & PERSONA SWITCHER
+       ========================================== */
+    .nb-header {
+      background-color: var(--navy-dark);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bank-symbol {
+      font-size: 20px;
+      color: var(--brand-primary);
+    }
+
+    .bank-name {
+      font-family: var(--font-stack);
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .bank-name span {
+      color: var(--brand-primary);
+    }
+
+    /* Persona tab list switcher */
+    .persona-switcher {
+      display: flex;
+      background-color: var(--navy-medium);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--navy-light);
+    }
+
+    .persona-tab {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-family: var(--font-stack);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .persona-tab.active {
+      background-color: var(--brand-primary);
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .header-demo-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-demo {
+      background-color: var(--pink-highlight);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================
+       MAIN LAYOUT MODULE
+       ========================================== */
+    .main-workspace {
+      flex-grow: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .workspace-section {
+      width: 100%;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================
+       PERSONA A: EMPLOYEE JOURNEY (STEPPER LAYOUT)
+       ========================================== */
+    .employee-workspace-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Stepper Top Progress Bar & Segmented Toggles */
+    .stepper-sidebar {
+      background: white;
+      border: 1px solid var(--border-gray);
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-soft);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stepper-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stepper-bar-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .stepper-bar-percent {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-primary);
+    }
+
+    .stepper-progress-bar-container {
+      height: 6px;
+      background-color: #cbd5e1;
+      border-radius: 3px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .stepper-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-primary) 0%, var(--emerald-accent) 100%);
+      transition: width 0.3s ease;
+    }
+
+    .stepper-bar-segments {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .bar-segment {
+      height: 24px;
+      flex: 1;
+      background-color: var(--bg-slate);
+      border: 1.5px solid var(--border-gray);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: not-allowed;
+      opacity: 0.5;
+      transition: var(--transition-fast);
+    }
+
+    .bar-segment.unlocked {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+
+    .bar-segment.unlocked:hover {
+      opacity: 1;
+      border-color: var(--brand-primary);
+      background-color: white;
+    }
+
+    .bar-segment.active {
+      border-color: var(--brand-primary);
+      background-color: var(--brand-primary);
+      color: white;
+      opacity: 1 !important;
+    }
+
+    .bar-segment.completed {
+      border-color: var(--emerald-accent);
+      background-color: var(--emerald-accent);
+      color: white;
+      opacity: 1 !important;
+    }
+
+    .stepper-nav-item.completed .step-lbl-text {
+      color: var(--text-main);
+    }
+
+    /* Forms container card */
+    .form-workspace-panel {
+      background: white;
+      border: 1px solid var(--border-gray);
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: var(--shadow-premium);
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .form-panel-header {
+      border-bottom: 1.5px dashed var(--border-gray);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .form-panel-title h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-panel-title p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Interactive components styling */
+    .form-body-card {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-footer-actionbar {
+      border-top: 1px solid var(--border-gray);
+      padding-top: 24px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Buttons styling */
+    .btn-nb {
+      font-family: var(--font-stack);
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-nb-primary {
+      background-color: var(--brand-primary);
+      color: white;
+    }
+
+    .btn-nb-primary:hover {
+      background-color: var(--brand-hover);
+    }
+
+    .btn-nb-primary:disabled {
+      background-color: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .btn-nb-outline {
+      background: transparent;
+      border: 1.5px solid var(--border-gray);
+      color: var(--text-muted);
+    }
+
+    .btn-nb-outline:hover {
+      background-color: var(--bg-slate);
+      color: var(--text-main);
+    }
+
+    /* Form Fields input elements */
+    .input-grp-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-label-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label-box label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy-light);
+    }
+
+    .input-control {
+      font-family: var(--font-stack);
+      font-size: 14px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-gray);
+      border-radius: 8px;
+      outline: none;
+      width: 100%;
+      background: white;
+      transition: var(--transition-fast);
+    }
+
+    .input-control:focus {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.08);
+    }
+
+    .input-control:disabled {
+      background-color: #f1f5f9;
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    /* DPDP Granular Consent container */
+    .consent-card-box {
+      border: 1px solid var(--border-gray);
+      border-left: 4px solid var(--brand-primary);
+      border-radius: 8px;
+      padding: 18px;
+      background-color: var(--bg-slate);
+    }
+
+    .consent-card-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .consent-items-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .consent-checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .consent-checkbox-row input[type="checkbox"] {
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .consent-desc-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .consent-desc-lbl strong {
+      color: var(--text-main);
+    }
+
+    .consent-revocation-link {
+      font-size: 10.5px;
+      color: var(--brand-primary);
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .consent-revocation-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Verification indicator rows */
+    .status-check-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      background-color: var(--bg-slate);
+      border-radius: 6px;
+      border: 1px solid var(--border-gray);
+    }
+
+    .status-check-badge.active-success {
+      color: var(--emerald-accent);
+      background-color: rgba(16, 185, 129, 0.05);
+      border-color: var(--emerald-accent);
+    }
+
+    /* Slider styling */
+    .sliders-panel-wrapper {
+      background-color: var(--bg-slate);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .slider-box-row {
+      margin-bottom: 20px;
+    }
+
+    .slider-box-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .slider-headers {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .slider-headers span {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .slider-headers strong {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--brand-primary);
+    }
+
+    .slider-el {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+      background: #cbd5e1;
+      -webkit-appearance: none;
+    }
+
+    .slider-el::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--brand-primary);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      transition: var(--transition-fast);
+    }
+
+    .slider-el::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Live EMI display box */
+    .live-emi-box-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      background: white;
+      border: 1px solid var(--border-gray);
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .emi-item-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .emi-item-col span {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .emi-item-col strong {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    /* Penny Drop verification box */
+    .penny-drop-verification-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border-gray);
+      border-radius: 8px;
+      padding: 12px 16px;
+      background: white;
+    }
+
+    /* Animated HRMS fetch shimmers */
+    .simulated-api-logs-terminal {
+      background: var(--navy-dark);
+      color: #38bdf8;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      height: 120px;
+      overflow-y: auto;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .log-line {
+      display: flex;
+      gap: 10px;
+    }
+
+    .log-line .timestamp {
+      color: var(--text-muted);
+    }
+
+    .log-line .success {
+      color: var(--emerald-accent);
+    }
+
+    /* FOIR card status */
+    .eligibility-rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .rule-checker-card {
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      padding: 14px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .rule-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rule-name-text {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .rule-status-chip {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .rule-value-desc {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    /* Key Facts Statement Table styling */
+    .kfs-container-box {
+      border: 1.5px solid var(--navy-dark);
+      border-radius: 8px;
+      background: white;
+      overflow: hidden;
+    }
+
+    .kfs-table-header {
+      background: var(--navy-dark);
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kfs-table-header h3 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .kfs-lang-toggle {
+      display: flex;
+      background-color: var(--navy-medium);
+      padding: 2px;
+      border-radius: 4px;
+      border: 1px solid var(--navy-light);
+    }
+
+    .kfs-lang-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .kfs-lang-btn.active {
+      background-color: var(--brand-primary);
+      color: white;
+    }
+
+    .kfs-table-element {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+
+    .kfs-table-element th, .kfs-table-element td {
+      border-bottom: 1px solid var(--border-gray);
+      padding: 10px 16px;
+    }
+
+    .kfs-table-element th {
+      background-color: var(--bg-slate);
+      font-weight: 700;
+      color: var(--text-muted);
+      width: 35%;
+    }
+
+    .kfs-table-element tr:last-child td, .kfs-table-element tr:last-child th {
+      border-bottom: none;
+    }
+
+    /* Signature Pad Canvas styling */
+    .signature-card-element {
+      border: 1.5px dashed var(--border-gray);
+      border-radius: 8px;
+      background: var(--bg-slate);
+      position: relative;
+      overflow: hidden;
+      height: 120px;
+    }
+
+    #esign-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    .canvas-actions-clear {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background: rgba(15, 23, 42, 0.08);
+      border: none;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Direct credit Animation box */
+    .disbursal-animation-box {
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 30px;
+      background: radial-gradient(circle at 50% 50%, white 0%, #f0fdf4 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .animation-credit-node {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.1);
+      border: 2px dashed var(--emerald-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      animation: pulseGreen 2.5s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* ==========================================
+       PERSONA B: EMPLOYER HR DASHBOARD
+       ========================================== */
+    .employer-dashboard-layout {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+    }
+
+    .employer-main-card {
+      background: white;
+      border: 1px solid var(--border-gray);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .employer-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-gray);
+      padding-bottom: 12px;
+    }
+
+    .employer-title-row h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    /* Exposure Limits widgets */
+    .employer-exposure-widget {
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 18px;
+      background: var(--bg-slate);
+      margin-bottom: 24px;
+    }
+
+    .exposure-progress-bar-container {
+      height: 10px;
+      background: #cbd5e1;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .exposure-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-primary) 0%, var(--pink-highlight) 100%);
+      transition: width 0.5s ease;
+    }
+
+    .exposure-metrics-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Employee approvals table queue */
+    .approvals-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: left;
+    }
+
+    .approvals-table th, .approvals-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-gray);
+    }
+
+    .approvals-table th {
+      font-weight: 700;
+      color: var(--text-muted);
+      background-color: var(--bg-slate);
+    }
+
+    /* ==========================================
+       PERSONA C: BANK CREDIT CONSOLE
+       ========================================== */
+    .bank-console-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .compliance-tracker-dashboard {
+      grid-column: span 2;
+    }
+
+    .compliance-map-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+      margin-top: 15px;
+    }
+
+    .compliance-map-table th, .compliance-map-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-gray);
+    }
+
+    .compliance-map-table th {
+      background-color: var(--navy-dark);
+      color: white;
+      font-weight: 700;
+    }
+
+    .compliance-map-table tr:hover {
+      background-color: var(--bg-slate);
+    }
+
+    /* policy editors */
+    .policy-toggle-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border-gray);
+      border-radius: 8px;
+      padding: 14px 18px;
+      background: white;
+      margin-bottom: 10px;
+    }
+
+    /* Switch slider toggles */
+    .switch-toggle-el {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 22px;
+    }
+
+    .switch-toggle-el input { opacity: 0; width: 0; height: 0; }
+
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px; width: 16px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .switch-slider { background-color: var(--brand-primary); }
+    input:checked + .switch-slider:before { transform: translateX(22px); }
+
+    input:disabled + .switch-slider {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ==========================================
+       FOOTER
+       ========================================== */
+    .nb-footer {
+      background-color: white;
+      border-top: 1px solid var(--border-gray);
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       TOP NAVIGATION BAR & PERSONA SWITCHER
+       ========================================== -->
+  <header class="nb-header">
+    <div class="header-logo-group">
+      <span class="bank-symbol">◆</span>
+      <h1 class="bank-name">NextBank <span>Staff Loan</span></h1>
+      <span class="rbi-badge rbi-success">⚖️ RBI MD 2025 Compliant</span>
+    </div>
+    
+    <div class="persona-switcher">
+      <button type="button" class="persona-tab active" data-persona="employee" onclick="switchPersona('employee')">Employee Self-Service</button>
+      <button type="button" class="persona-tab" data-persona="employer" onclick="switchPersona('employer')">Employer HR Console</button>
+      <button type="button" class="persona-tab" data-persona="bank" onclick="switchPersona('bank')">Bank Credit Console</button>
+    </div>
+    
+    <div class="header-demo-badge">
+      <span class="badge-demo">Presales Mock</span>
+      <span id="save-status" style="font-size: 11px; color: var(--text-light);">Auto-saving...</span>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       MAIN INTERACTIVE WORKSPACE
+       ========================================== -->
+  <main class="main-workspace">
+    
+    <!-- ==========================================
+         PERSONA A: EMPLOYEE WORKSPACE
+         ========================================== -->
+    <section class="workspace-section" id="persona-section-employee">
+      <div class="employee-workspace-layout">
+        
+        <!-- Top Horizontal Progress Bar -->
+        <aside class="stepper-sidebar">
+          <div class="stepper-bar-header">
+            <span class="stepper-bar-title" id="stepper-active-title">Step 1 of 9: Access & Onboarding</span>
+            <span class="stepper-bar-percent" id="stepper-active-percent">11% Complete</span>
+          </div>
+          <div class="stepper-progress-bar-container">
+            <div class="stepper-progress-fill" id="stepper-progress-fill" style="width: 11.1%;"></div>
+          </div>
+          <div class="stepper-bar-segments">
+            <span class="bar-segment active unlocked" data-step="1" onclick="jumpToStep(1)" title="Access & Onboarding">1</span>
+            <span class="bar-segment" id="bar-seg-2" data-step="2" onclick="jumpToStep(2)" title="Loan Application">2</span>
+            <span class="bar-segment" id="bar-seg-3" data-step="3" onclick="jumpToStep(3)" title="Employment Verification">3</span>
+            <span class="bar-segment" id="bar-seg-4" data-step="4" onclick="jumpToStep(4)" title="Credit & Bureau Risk">4</span>
+            <span class="bar-segment" id="bar-seg-5" data-step="5" onclick="jumpToStep(5)" title="Eligibility Engine">5</span>
+            <span class="bar-segment" id="bar-seg-6" data-step="6" onclick="jumpToStep(6)" title="HR Guarantee & KFS">6</span>
+            <span class="bar-segment" id="bar-seg-7" data-step="7" onclick="jumpToStep(7)" title="Documents & eSign">7</span>
+            <span class="bar-segment" id="bar-seg-8" data-step="8" onclick="jumpToStep(8)" title="Direct Disbursement">8</span>
+            <span class="bar-segment" id="bar-seg-9" data-step="9" onclick="jumpToStep(9)" title="Repayment & Monitor">9</span>
+          </div>
+        </aside>
+
+        <!-- Right Form panel -->
+        <article class="form-workspace-panel">
+          
+          <!-- STEP 1: ACCESS & ONBOARDING -->
+          <div class="step-form-container" id="step-form-1">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Onboarding & KYC Integration</h2>
+                <p>Verify your details via Aadhaar e-KYC and PAN NSDL registers.</p>
+              </div>
+              <span class="rbi-badge rbi-critical">⚖️ Aadhaar Masking & CKYC</span>
+            </div>
+            
+            <div class="form-body-card">
+              <div class="input-grp-row">
+                <div class="form-label-box">
+                  <label for="work-email">Work Email ID</label>
+                  <input type="email" id="work-email" class="input-control" value="priya.sharma@techvista.com">
+                </div>
+                <div class="form-label-box">
+                  <label for="mobile-number">Mobile Number (Linked with Aadhaar)</label>
+                  <input type="tel" id="mobile-number" class="input-control" value="+91 98450 12345">
+                </div>
+              </div>
+              
+              <div class="input-grp-row">
+                <div class="form-label-box">
+                  <label>Aadhaar Number (UIDAI eKYC)</label>
+                  <input type="text" class="input-control" value="XXXX-XXXX-1234" disabled style="letter-spacing: 2px; font-weight: 700;">
+                </div>
+                <div class="form-label-box">
+                  <label for="pan-number">Permanent Account Number (PAN)</label>
+                  <input type="text" id="pan-number" class="input-control uppercase" value="BHPPS8921K">
+                </div>
+              </div>
+
+              <!-- CKYC Match status indicator -->
+              <div class="penny-drop-verification-row">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <strong style="font-size: 13px; color: var(--navy-dark);">Central KYC Registry (CKYC) Check</strong>
+                  <span style="font-size: 11px; color: var(--text-muted);">Record matched successfully under reference: CKYC-79812A812</span>
+                </div>
+                <span class="status-check-badge active-success">✓ CKYC Hit: PRIYA SHARMA</span>
+              </div>
+
+              <!-- DPDP Granular Consents -->
+              <div class="consent-card-box">
+                <div class="consent-card-title">
+                  <span>Granular Consent Declaration (DPDP Act Compliance)</span>
+                  <span style="font-size: 10px; font-weight: 800; color: var(--brand-primary);">ID: CONS-912A8</span>
+                </div>
+                <div class="consent-items-checklist">
+                  <label class="consent-checkbox-row">
+                    <input type="checkbox" id="consent-ekyc" checked>
+                    <span class="consent-desc-lbl">I authorize NextBank to perform <strong>Aadhaar e-KYC query</strong> with UIDAI for identity check verification.</span>
+                  </label>
+                  <label class="consent-checkbox-row">
+                    <input type="checkbox" id="consent-bureau" checked>
+                    <span class="consent-desc-lbl">I authorize NextBank to pull my <strong>Credit Information Reports</strong> from CIBIL, Experian, Equifax, and CRIF.</span>
+                  </label>
+                  <label class="consent-checkbox-row">
+                    <input type="checkbox" id="consent-hrms" checked>
+                    <span class="consent-desc-lbl">I agree to allow NextBank to exchange <strong>employment check datasets</strong> with my employer TechVista Solutions HR portal.</span>
+                  </label>
+                </div>
+                <a href="#" class="consent-revocation-link" onclick="event.preventDefault(); alert('Revocation link triggered. Under DPDP rules, you can revoke consent at any time; however, this will restrict processing of this payroll check-off loan.');">Revoke consent parameters</a>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <span style="font-size: 12px; color: var(--text-muted);">Verified NSDL Name match: <strong>PRIYA SHARMA</strong></span>
+              <button type="button" class="btn-nb btn-nb-primary" onclick="proceedToStep(2)">Verify & Continue</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: LOAN APPLICATION -->
+          <div class="step-form-container hidden" id="step-form-2">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Loan Package & Settings</h2>
+                <p>Configure amount requirements and link your primary salary account.</p>
+              </div>
+              <span class="rbi-badge rbi-success">⚖️ APR Transparency</span>
+            </div>
+            
+            <div class="form-body-card">
+              <div class="input-grp-row">
+                <div class="form-label-box">
+                  <label for="loan-variant">Select Loan Variant</label>
+                  <select id="loan-variant" class="input-control" onchange="updateLoanVariant()">
+                    <option value="standard">Standard Staff Loan (MOU linked)</option>
+                    <option value="topup">Staff Loan Top-up</option>
+                    <option value="festive">Festive Advance (Capped limit)</option>
+                  </select>
+                </div>
+                <div class="form-label-box">
+                  <label for="loan-purpose">Purpose of Credit</label>
+                  <select id="loan-purpose" class="input-control">
+                    <option value="Personal">Personal / Household expenses</option>
+                    <option value="Medical">Medical emergency assistance</option>
+                    <option value="Education">Higher education funding</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Interactive Sliders -->
+              <div class="sliders-panel-wrapper">
+                <div class="slider-box-row">
+                  <div class="slider-headers">
+                    <span>Desired Loan Amount</span>
+                    <strong id="amount-val-display">₹5,00,000</strong>
+                  </div>
+                  <input type="range" id="loan-amount-slider" class="slider-el" min="50000" max="1500000" step="25000" value="500000" oninput="calculateEMI()">
+                </div>
+                
+                <div class="slider-box-row">
+                  <div class="slider-headers">
+                    <span>Tenure Choice</span>
+                    <strong id="tenure-val-display">36 Months</strong>
+                  </div>
+                  <input type="range" id="loan-tenure-slider" class="slider-el" min="12" max="84" step="6" value="36" oninput="calculateEMI()">
+                </div>
+              </div>
+
+              <!-- Primary salary bank details & Penny Drop verify -->
+              <div class="input-grp-row">
+                <div class="form-label-box">
+                  <label for="salary-ifsc">Salary Account IFSC Code</label>
+                  <input type="text" id="salary-ifsc" class="input-control uppercase" value="HDFC0000104">
+                </div>
+                <div class="form-label-box">
+                  <label for="salary-acct-num">Salary Account Number</label>
+                  <input type="text" id="salary-acct-num" class="input-control" value="501004892182">
+                </div>
+              </div>
+
+              <div class="penny-drop-verification-row">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <strong style="font-size: 13px; color: var(--navy-dark);">NPCI Bank Account Name Verification (Penny-Drop)</strong>
+                  <span style="font-size: 11px; color: var(--text-muted);">₹1.00 credited. Account Holder Name matches: **PRIYA SHARMA**</span>
+                </div>
+                <span class="status-check-badge active-success">✓ Penny-Drop Verified</span>
+              </div>
+
+              <!-- Live calculations summary box -->
+              <div class="live-emi-box-summary">
+                <div class="emi-item-col">
+                  <span>Interest Rate (Floating)</span>
+                  <strong id="live-rate-val">8.25% p.a.</strong>
+                </div>
+                <div class="emi-item-col">
+                  <span>Estimated Monthly EMI</span>
+                  <strong id="live-emi-val">₹15,729</strong>
+                </div>
+                <div class="emi-item-col">
+                  <span>All-inclusive APR %</span>
+                  <strong id="live-apr-val">8.34% p.a.</strong>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-outline" onclick="proceedToStep(1)">Back</button>
+              <button type="button" class="btn-nb btn-nb-primary" onclick="proceedToStep(3)">Confirm Loan Options</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: EMPLOYMENT VERIFICATION -->
+          <div class="step-form-container hidden" id="step-form-3">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Employment Credentials</h2>
+                <p>Simulating real-time HRMS integrations and active payroll checks.</p>
+              </div>
+              <span class="rbi-badge rbi-success">⚖️ Payroll Check-off</span>
+            </div>
+            
+            <div class="form-body-card">
+              <div class="penny-drop-verification-row">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <strong style="font-size: 13px; color: var(--navy-dark);">Integrated Employer HRMS Data (Darwinbox API)</strong>
+                  <span style="font-size: 11px; color: var(--text-muted);">Corporate Code: <strong>TVISTA-BLR-029</strong></span>
+                </div>
+                <span class="status-check-badge active-success">✓ TechVista Empanelled MOU</span>
+              </div>
+
+              <!-- Simulated API Terminal log box -->
+              <div class="simulated-api-logs-terminal" id="hrms-api-terminal">
+                <div class="log-line">
+                  <span class="timestamp">[13:34:02]</span>
+                  <span>INIT: Query HRMS Darwinbox salary endpoint...</span>
+                </div>
+                <div class="log-line">
+                  <span class="timestamp">[13:34:03]</span>
+                  <span class="success">SUCCESS: Record found for Priya Sharma (ID: TV9821)</span>
+                </div>
+                <div class="log-line">
+                  <span class="timestamp">[13:34:04]</span>
+                  <span>CONFIRM: Active employment status confirmed. Net salary verified.</span>
+                </div>
+              </div>
+
+              <div class="input-grp-row">
+                <div class="form-label-box">
+                  <label>Date of Joining (DOJ)</label>
+                  <input type="text" class="input-control" value="12-May-2021" disabled>
+                </div>
+                <div class="form-label-box">
+                  <label>Net Monthly Salary (3-Month Average)</label>
+                  <input type="text" class="input-control" value="₹1,20,000" disabled>
+                </div>
+              </div>
+
+              <div class="input-grp-row">
+                <div class="form-label-box">
+                  <label>Retirement Age (Employer Policy)</label>
+                  <input type="text" class="input-control" value="60 Years (May-2056)" disabled>
+                </div>
+                <div class="form-label-box">
+                  <label>Employee EPFO UAN Verification</label>
+                  <div class="status-check-badge active-success" style="padding: 10px;">
+                    ✓ UAN Passbook Match: 100982104921
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-outline" onclick="proceedToStep(2)">Back</button>
+              <button type="button" class="btn-nb btn-nb-primary" onclick="proceedToStep(4)">Pull Credit Bureau</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: CREDIT & BUREAU RISK -->
+          <div class="step-form-container hidden" id="step-form-4">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Credit Bureau Evaluation</h2>
+                <p>Direct integration check showing CIBIL scores and transparent FOIR calculation.</p>
+              </div>
+              <span class="rbi-badge rbi-critical">⚖️ Credit Information Companies</span>
+            </div>
+            
+            <div class="form-body-card">
+              <div class="input-grp-row">
+                <!-- CIBIL score simulator dial UI -->
+                <div class="sliders-panel-wrapper" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">CIBIL TransUnion Pull</span>
+                  <div style="font-size: 48px; font-weight: 800; color: var(--emerald-accent); margin: 10px 0;">762</div>
+                  <span class="status-check-badge active-success" style="font-size: 10px;">✓ Excellent Credit Rating</span>
+                </div>
+                
+                <!-- FOIR Obligation summary card -->
+                <div class="sliders-panel-wrapper">
+                  <h4 style="font-size: 13px; font-weight: 700; color: var(--navy-dark); margin-bottom: 12px;">FOIR Ratio Assessment</h4>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                      <span>Verified Net Income:</span>
+                      <strong>₹1,20,000</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                      <span>Existing EMI Obligations:</span>
+                      <strong>₹30,000</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                      <span>New Loan EMI:</span>
+                      <strong id="foir-new-emi">₹15,729</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; border-top: 1px dashed var(--border-gray); padding-top: 8px; margin-top: 4px;">
+                      <span>Total FOIR %:</span>
+                      <strong id="foir-percentage" class="text-emerald">38.1% vs 55% Cap</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Extracted obligations list table -->
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--navy-dark); margin-top: 10px;">Active Bureau Obligation Registry</h4>
+              <table class="approvals-table">
+                <thead>
+                  <tr>
+                    <th>Lender Name</th>
+                    <th>Type</th>
+                    <th>Sanction Amt</th>
+                    <th>Current Balance</th>
+                    <th>Monthly EMI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>HDFC Bank</td>
+                    <td>Auto Loan</td>
+                    <td>₹8,00,000</td>
+                    <td>₹4,50,000</td>
+                    <td>₹18,000</td>
+                  </tr>
+                  <tr>
+                    <td>ICICI Bank</td>
+                    <td>Credit Card</td>
+                    <td>₹2,00,000</td>
+                    <td>₹45,000</td>
+                    <td>₹12,000</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-outline" onclick="proceedToStep(3)">Back</button>
+              <button type="button" class="btn-nb btn-nb-primary" onclick="proceedToStep(5)">Run Eligibility Rules</button>
+            </div>
+          </div>
+
+          <!-- STEP 5: ELIGIBILITY ENGINE -->
+          <div class="step-form-container hidden" id="step-form-5">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Policy Eligibility Check</h2>
+                <p>Validating NextBank risk models and employer exposure allocations.</p>
+              </div>
+              <span class="rbi-badge rbi-success">⚖️ Exposure Limits</span>
+            </div>
+            
+            <div class="form-body-card">
+              <!-- Grid of eligibility pass/fail status checks -->
+              <div class="eligibility-rules-grid">
+                <div class="rule-checker-card">
+                  <div class="rule-header-row">
+                    <span class="rule-name-text">MOU Agreement</span>
+                    <span class="rule-status-chip bg-emerald-light text-emerald">PASSED</span>
+                  </div>
+                  <div class="rule-value-desc">Active MOU validation</div>
+                </div>
+                
+                <div class="rule-checker-card">
+                  <div class="rule-header-row">
+                    <span class="rule-name-text">Service Tenure</span>
+                    <span class="rule-status-chip bg-emerald-light text-emerald">PASSED</span>
+                  </div>
+                  <div class="rule-value-desc">4.2 Years (Min 1Y)</div>
+                </div>
+                
+                <div class="rule-checker-card">
+                  <div class="rule-header-row">
+                    <span class="rule-name-text">Age at Maturity</span>
+                    <span class="rule-status-chip bg-emerald-light text-emerald">PASSED</span>
+                  </div>
+                  <div class="rule-value-desc">37 Years (Max 60)</div>
+                </div>
+                
+                <div class="rule-checker-card">
+                  <div class="rule-header-row">
+                    <span class="rule-name-text">FOIR Cap</span>
+                    <span class="rule-status-chip bg-emerald-light text-emerald">PASSED</span>
+                  </div>
+                  <div class="rule-value-desc" id="rule-foir-val">38.1% vs 55.0%</div>
+                </div>
+                
+                <div class="rule-checker-card">
+                  <div class="rule-header-row">
+                    <span class="rule-name-text">Salary Multiple</span>
+                    <span class="rule-status-chip bg-emerald-light text-emerald">PASSED</span>
+                  </div>
+                  <div class="rule-value-desc">4.1× net monthly</div>
+                </div>
+                
+                <div class="rule-checker-card">
+                  <div class="rule-header-row">
+                    <span class="rule-name-text">Exposure Capping</span>
+                    <span class="rule-status-chip bg-emerald-light text-emerald">PASSED</span>
+                  </div>
+                  <div class="rule-value-desc" id="rule-exposure-val">₹4.20 Cr / ₹5.00 Cr</div>
+                </div>
+              </div>
+
+              <!-- Corporate Headroom Bar -->
+              <div class="employer-exposure-widget mt-15">
+                <div class="slider-headers">
+                  <span style="font-weight: 700; color: var(--navy-dark);">TechVista Solutions Pvt Ltd Exposure Registry</span>
+                  <span id="headroom-text">Headroom remaining: ₹80,00,000</span>
+                </div>
+                <div class="exposure-progress-bar-container">
+                  <div class="exposure-progress-fill" id="headroom-fill-bar" style="width: 84%;"></div>
+                </div>
+                <div class="exposure-metrics-labels">
+                  <span>Sanctioned: ₹4.20 Cr</span>
+                  <span>Limit Allocation: ₹5.00 Cr</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-outline" onclick="proceedToStep(4)">Back</button>
+              <button type="button" class="btn-nb btn-nb-primary" onclick="proceedToStep(6)">Get KFS & Offer</button>
+            </div>
+          </div>
+
+          <!-- STEP 6: EMPLOYER GUARANTEE & OFFER (KFS) -->
+          <div class="step-form-container hidden" id="step-form-6">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Key Facts Statement (KFS)</h2>
+                <p>Standardized pricing and terms document as per RBI lending norms.</p>
+              </div>
+              <span class="rbi-badge rbi-critical">⚖️ Mandatory KFS disclosure</span>
+            </div>
+            
+            <div class="form-body-card">
+              
+              <!-- KFS Table container with English/Hindi switcher -->
+              <div class="kfs-container-box">
+                <div class="kfs-table-header">
+                  <h3 id="kfs-headline">Key Facts Statement - Personal Staff Loan</h3>
+                  <div class="kfs-lang-toggle">
+                    <button type="button" class="kfs-lang-btn active" id="lang-btn-en" onclick="setKfsLanguage('EN')">English</button>
+                    <button type="button" class="kfs-lang-btn" id="lang-btn-hi" onclick="setKfsLanguage('HI')">हिंदी</button>
+                  </div>
+                </div>
+                
+                <table class="kfs-table-element">
+                  <tbody>
+                    <tr>
+                      <th id="kfs-th-amt">Sanctioned Amount</th>
+                      <td id="kfs-td-amt">₹5,00,000</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-apr">Annual Percentage Rate (APR) %</th>
+                      <td id="kfs-td-apr">8.34% p.a. (all-inclusive)</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-rate">Floating Rate of Interest</th>
+                      <td id="kfs-td-rate">8.25% (NextBank RE benchmark + spread)</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-tenure">Loan Tenure</th>
+                      <td id="kfs-td-tenure">36 Months</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-charges">Fee breakdown (Processing + GST)</th>
+                      <td id="kfs-td-charges">₹590 (₹500 flat fee + 18% GST)</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-penal">Penal Charge policy</th>
+                      <td id="kfs-td-penal">₹500 flat fee per default cycle (Reasonable, non-capitalized)</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-cooling">Cooling-off / Exit Period</th>
+                      <td id="kfs-td-cooling">3 Days (No foreclosure penalty. Return principal + proportionate APR)</td>
+                    </tr>
+                    <tr>
+                      <th id="kfs-th-grievance">Grievance Officer Name</th>
+                      <td>Shri Rohit Mehra (grievance@nextbank.co.in)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-outline" onclick="proceedToStep(5)">Back</button>
+              <button type="button" class="btn-nb btn-nb-primary" onclick="proceedToStep(7)">Verify & eSign</button>
+            </div>
+          </div>
+
+          <!-- STEP 7: DOCUMENTS & ESIGN -->
+          <div class="step-form-container hidden" id="step-form-7">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Digital signature and stamp certificates</h2>
+                <p>Complete e-Sign verification via Aadhaar OTP and pay stamp duty fees.</p>
+              </div>
+              <span class="rbi-badge rbi-critical">⚖️ SHCIL Stamp Registry</span>
+            </div>
+            
+            <div class="form-body-card">
+              <!-- Stamp duty certificate lines -->
+              <div class="penny-drop-verification-row">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <strong style="font-size: 13px; color: var(--navy-dark);">State Stamp Duty Certificate (Karnataka State e-Stamps)</strong>
+                  <span style="font-size: 11px; color: var(--text-muted);">Reference: <strong>IN-KA79820149210B</strong></span>
+                </div>
+                <span class="status-check-badge active-success">₹100 Duty Cleared</span>
+              </div>
+
+              <!-- Document checklist list -->
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--navy-dark); margin-top: 10px;">Submitted Onboarding Documents</h4>
+              <div class="consent-items-checklist">
+                <label class="consent-checkbox-row" style="cursor: default;">
+                  <input type="checkbox" checked disabled>
+                  <span class="consent-desc-lbl">Aadhaar masked XML identity certificate (UIDAI registries)</span>
+                </label>
+                <label class="consent-checkbox-row" style="cursor: default;">
+                  <input type="checkbox" checked disabled>
+                  <span class="consent-desc-lbl">Salary slip repository files (Darwinbox auto-fetch)</span>
+                </label>
+              </div>
+
+              <!-- Interactive signature pad Canvas -->
+              <div class="form-label-box mt-15">
+                <label>Draw Signature on Pad</label>
+                <div class="signature-card-element">
+                  <canvas id="esign-canvas"></canvas>
+                  <button type="button" class="canvas-actions-clear" onclick="clearSignatureCanvas()">Clear</button>
+                </div>
+              </div>
+
+              <div class="form-label-box" id="aadhaar-otp-esign-group">
+                <label for="aadhaar-esign-otp">Aadhaar OTP for e-Sign</label>
+                <div class="input-with-action" style="display: flex; gap: 10px;">
+                  <input type="password" id="aadhaar-esign-otp" class="input-control" placeholder="6-digit OTP code">
+                  <button type="button" class="btn btn-nb btn-nb-primary" onclick="verifyEsignOtp()">eSign OTP Verify</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-outline" onclick="proceedToStep(6)">Back</button>
+              <button type="button" class="btn-nb btn-nb-primary" id="btn-esign-continue" disabled onclick="proceedToStep(8)">Disburse Loan</button>
+            </div>
+          </div>
+
+          <!-- STEP 8: DISBURSEMENT -->
+          <div class="step-form-container hidden" id="step-form-8">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Direct account disbursal</h2>
+                <p>Transfer credit directly to your primary salary account.</p>
+              </div>
+              <span class="rbi-badge rbi-critical">⚖️ No third-party pass-through</span>
+            </div>
+            
+            <div class="form-body-card">
+              <!-- Credit transfer animations -->
+              <div class="disbursal-animation-box" id="disburse-anim-container">
+                <div class="animation-credit-node">💸</div>
+                <h3 id="disburse-animation-header">Processing IMPS Transfer...</h3>
+                <p id="disburse-animation-desc" style="font-size: 13px; color: var(--text-muted);">Crediting funds directly to: <strong>HDFC Bank A/C 501004892182</strong></p>
+              </div>
+
+              <div class="penny-drop-verification-row hidden" id="disburse-completed-success-card">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <strong style="font-size: 13px; color: var(--navy-dark);" id="sanction-headline">Loan Account Created: 890124912</strong>
+                  <span style="font-size: 11px; color: var(--text-muted);" id="sanction-body">IMPS UTR Code: <strong>NB-KA-978120B8912</strong>. Loan parameters active.</span>
+                </div>
+                <a href="#" class="status-check-badge active-success" style="text-decoration: none;" onclick="event.preventDefault(); alert('Downloading Sanction Letter on NextBank Letterhead...');">💾 Sanction Letter</a>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-primary" id="btn-complete-disbursal" disabled onclick="proceedToStep(9)">Go to Repayment Portal</button>
+            </div>
+          </div>
+
+          <!-- STEP 9: REPAYMENT & MONITORING -->
+          <div class="step-form-container hidden" id="step-form-9">
+            <div class="form-panel-header">
+              <div class="form-panel-title">
+                <h2>Repayment Console</h2>
+                <p>Track check-off dates, payments, and foreclosure parameters.</p>
+              </div>
+              <span class="rbi-badge rbi-success">⚖️ Cooling-off & Prepayments</span>
+            </div>
+            
+            <div class="form-body-card">
+              <div class="input-grp-row">
+                <!-- Cooling off active exit button -->
+                <div class="sliders-panel-wrapper" style="border-left: 4px solid var(--amber-accent);">
+                  <strong style="font-size: 13px; color: var(--navy-dark); display: block; margin-bottom: 6px;">Cooling-off / Look-up period</strong>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 12px;">You can cancel this loan within 72 hours by returning principal + proportionate interest. No foreclosure charges apply.</span>
+                  <button type="button" class="btn-nb btn-nb-outline btn-sm text-amber" onclick="triggerCoolingOffExit()">Exit Loan Packet (Active)</button>
+                </div>
+                
+                <div class="sliders-panel-wrapper">
+                  <strong style="font-size: 13px; color: var(--navy-dark); display: block; margin-bottom: 6px;">Foreclosure Policy</strong>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 12px;">Floating interest rate unsecured loan: No foreclosure or prepayment fees. Pay outstanding balances instantly.</span>
+                  <button type="button" class="btn-nb btn-nb-outline btn-sm" onclick="triggerForecloseLoan()">Foreclose Account</button>
+                </div>
+              </div>
+
+              <!-- Repayment schedule logs -->
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--navy-dark); margin-top: 10px;">Repayment Check-off Schedule</h4>
+              <table class="approvals-table">
+                <thead>
+                  <tr>
+                    <th>Cycle</th>
+                    <th>Due Date</th>
+                    <th>EMI Amount</th>
+                    <th>Rail Type</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>01-Sep-2026</td>
+                    <td class="table-emi-val">₹15,729</td>
+                    <td>Payroll Deduction</td>
+                    <td><span class="rule-status-chip bg-amber-light text-amber">Active check-off</span></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>01-Oct-2026</td>
+                    <td class="table-emi-val">₹15,729</td>
+                    <td>Payroll Deduction</td>
+                    <td><span class="rule-status-chip bg-amber-light text-amber">Active check-off</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Fallback NACH badge -->
+              <div class="penny-drop-verification-row">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <strong style="font-size: 13px; color: var(--navy-dark);">NPCI NACH e-Mandate fallback registration</strong>
+                  <span style="font-size: 11px; color: var(--text-muted);">Configured as secondary backup rail if salary transfers fail. Standard limit: ₹50,000</span>
+                </div>
+                <span class="status-check-badge active-success">✓ NACH Mandate Active</span>
+              </div>
+            </div>
+            
+            <div class="form-footer-actionbar">
+              <button type="button" class="btn-nb btn-nb-primary" onclick="alert('Application and portal are active. Demo cycle complete.');">Restart Demo Journey</button>
+            </div>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         PERSONA B: EMPLOYER HR DASHBOARD
+         ========================================== -->
+    <section class="workspace-section hidden" id="persona-section-employer">
+      <div class="employer-dashboard-layout">
+        
+        <div class="employer-main-card">
+          <div class="employer-title-row">
+            <h3>Pending Staff Guarantees Queue</h3>
+            <span class="rbi-badge rbi-success">MOU check-off verification</span>
+          </div>
+          
+          <!-- Employee queue approval desk -->
+          <table class="approvals-table">
+            <thead>
+              <tr>
+                <th>Employee Name</th>
+                <th>Staff Code</th>
+                <th>DOJ</th>
+                <th>Net Salary</th>
+                <th>Requested Limit</th>
+                <th>Check-off Mandate</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="hr-row-priya">
+                <td><strong>Priya Sharma</strong></td>
+                <td>TV9821</td>
+                <td>12-May-2021</td>
+                <td>₹1,20,000</td>
+                <td class="hr-requested-limit">₹5,00,000</td>
+                <td><span class="text-emerald" style="font-weight: 700;">Authorised</span></td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn-nb btn-nb-primary btn-sm" onclick="approveHrGuarantee('priya')">Approve</button>
+                    <button type="button" class="btn-nb btn-nb-outline btn-sm text-danger" onclick="rejectHrGuarantee('priya')">Deny</button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="hr-row-rohan">
+                <td><strong>Rohan Mehta</strong></td>
+                <td>TV9124</td>
+                <td>10-Jul-2023</td>
+                <td>₹90,000</td>
+                <td>₹3,00,000</td>
+                <td><span class="text-amber" style="font-weight: 700;">Awaiting Guarantee</span></td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn-nb btn-nb-primary btn-sm" onclick="approveHrGuarantee('rohan')">Approve</button>
+                    <button type="button" class="btn-nb btn-nb-outline btn-sm text-danger" onclick="rejectHrGuarantee('rohan')">Deny</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Exposure Widget details -->
+          <div class="employer-main-card">
+            <div class="employer-title-row">
+              <h3>TechVista Corporate Limit Headroom</h3>
+            </div>
+            
+            <div class="employer-exposure-widget">
+              <div class="slider-headers">
+                <span>Sanction Limit exposure</span>
+                <strong id="hr-exposure-val">₹4.20 Cr / ₹5.00 Cr</strong>
+              </div>
+              <div class="exposure-progress-bar-container">
+                <div class="exposure-progress-fill" id="hr-exposure-fill" style="width: 84%;"></div>
+              </div>
+              <div class="exposure-metrics-labels">
+                <span>Remaining: ₹80,00,000</span>
+                <span>Active Loans: 84</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span>MOU Expiry Date:</span>
+                <strong>31-Dec-2028</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Missed Deductions:</span>
+                <strong class="text-emerald">0 Cases (Excellent)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Next payroll cut-off:</span>
+                <strong>25-Aug-2026</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         PERSONA C: BANK CREDIT CONSOLE
+         ========================================== -->
+    <section class="workspace-section hidden" id="persona-section-bank">
+      <div class="bank-console-layout">
+        
+        <!-- Underwritingworkbench panel -->
+        <div class="employer-main-card">
+          <div class="employer-title-row">
+            <h3>Underwriting exception queue (Non-STP)</h3>
+            <span class="rbi-badge rbi-warning">Checker Panel</span>
+          </div>
+
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">The following loan applications triggered automated risk limits and require human verification:</p>
+          
+          <div class="sliders-panel-wrapper" style="border-left: 4px solid var(--amber-accent); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <strong style="font-size: 13.5px;">Employee: Rohan Mehta</strong>
+              <span class="rule-status-chip bg-amber-light text-amber">FOIR Deviation</span>
+            </div>
+            
+            <div style="font-size: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+              <div>Salary: <strong>₹90,000</strong></div>
+              <div>CIBIL Score: <strong>685</strong></div>
+              <div>Required Amt: <strong>₹3,00,000</strong></div>
+              <div>Calculated FOIR: <strong class="text-crimson">58.5% (Max 55%)</strong></div>
+            </div>
+
+            <div class="form-label-box" style="margin-bottom: 12px;">
+              <label for="exception-mitigation">Checker Compensating Controls & Decision</label>
+              <select id="exception-mitigation" class="input-control">
+                <option value="cap-amount">Counter-offer: Reduce principal amount to ₹2,500,000 (FOIR 54%)</option>
+                <option value="co-borrower">Add guarantor check-off mandate</option>
+                <option value="deny">Deny application and reject loan packet</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button type="button" class="btn-nb btn-nb-primary btn-sm" onclick="alert('Checker approval decision published to maker log.');">Apply Control & Publish</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Policy editor and risk controls -->
+        <div class="employer-main-card">
+          <div class="employer-title-row">
+            <h3>Bank Lending Policy Editor</h3>
+          </div>
+
+          <div class="policy-toggle-card">
+            <div>
+              <strong style="font-size: 13px; display: block;">No auto credit-limit increases</strong>
+              <span style="font-size: 11px; color: var(--text-muted);">Prevent automatic upgrades without borrower explicit consent (RBI lending rules).</span>
+            </div>
+            <label class="switch-toggle-el">
+              <input type="checkbox" checked disabled>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="policy-toggle-card">
+            <div>
+              <strong style="font-size: 13px; display: block;">Maker-Checker workflow enforcement</strong>
+              <span style="font-size: 11px; color: var(--text-muted);">Any deviation from standard eligibility rules triggers human exception underwriting.</span>
+            </div>
+            <label class="switch-toggle-el">
+              <input type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="policy-toggle-card">
+            <div>
+              <strong style="font-size: 13px; display: block;">LSP Due-Diligence Audit</strong>
+              <span style="font-size: 11px; color: var(--text-muted);">Run daily screening on integrated LSP nodes.</span>
+            </div>
+            <label class="switch-toggle-el">
+              <input type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- REGULATORY COMPLIANCE MAP -->
+        <div class="employer-main-card compliance-tracker-dashboard">
+          <div class="employer-title-row">
+            <h3>⚖️ Regulatory Compliance Map Dashboard</h3>
+            <span class="rbi-badge rbi-success">RBI Audit Log: Verified</span>
+          </div>
+
+          <table class="compliance-map-table">
+            <thead>
+              <tr>
+                <th>Regulatory Clause (RBI MD / Act)</th>
+                <th>Requirement Description</th>
+                <th>Prototype Implementation Location</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RBI Digital Lending Directions 2025</strong></td>
+                <td>Key Facts Statement (KFS) prior to loan contract execution.</td>
+                <td>Employee Step 6 (Pricing table, APR break, vernacular toggle)</td>
+                <td><span class="text-emerald" style="font-weight: 700;">✅ COMPLIANT</span></td>
+              </tr>
+              <tr>
+                <td><strong>Look-up / Cooling-off Period</strong></td>
+                <td>Allow exits without prepayment penalties within cooling off window.</td>
+                <td>Employee Step 9 (Active cancellation option with UTR settlement logs)</td>
+                <td><span class="text-emerald" style="font-weight: 700;">✅ COMPLIANT</span></td>
+              </tr>
+              <tr>
+                <td><strong>Direct Account Disbursal</strong></td>
+                <td>Credit disbursals directly to borrower salary account only.</td>
+                <td>Employee Step 8 (Direct bank crediting animation without LSP pools)</td>
+                <td><span class="text-emerald" style="font-weight: 700;">✅ COMPLIANT</span></td>
+              </tr>
+              <tr>
+                <td><strong>Aadhaar Masking (eKYC)</strong></td>
+                <td>Mask Aadhaar numbers everywhere to ensure compliance with UIDAI.</td>
+                <td>Employee Step 1 (Aadhaar display reads: `XXXX-XXXX-1234`)</td>
+                <td><span class="text-emerald" style="font-weight: 700;">✅ COMPLIANT</span></td>
+              </tr>
+              <tr>
+                <td><strong>DPDP Act 2023</strong></td>
+                <td>Granular, purpose-limited consent without pre-checked parameters.</td>
+                <td>Employee Step 1 ( DPDP checklist modal with explicit revocations)</td>
+                <td><span class="text-emerald" style="font-weight: 700;">✅ COMPLIANT</span></td>
+              </tr>
+              <tr>
+                <td><strong>Fair Practices Code</strong></td>
+                <td>No foreclosure or pre-payment charges on floating interest rates.</td>
+                <td>Employee Step 9 (Disclosures noting zero fees for floating loans)</td>
+                <td><span class="text-emerald" style="font-weight: 700;">✅ COMPLIANT</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== */ -->
+  <footer class="nb-footer">
+    <p>◆ NextBank Staff Loan Platform &bull; Prototype for demonstration purposes only &bull; Simulated Indian market data &bull; Not an offer of credit.</p>
+  </footer>
+
+  <!-- ==========================================
+       JAVASCRIPT LOGIC
+       ========================================== -->
+  <script>
+    // App State Configuration
+    const state = {
+      activePersona: 'employee',
+      currentStep: 1,
+      maxStepUnlocked: 1,
+      data: {
+        loanAmount: 500000,
+        tenure: 36,
+        variant: 'standard',
+        rate: 8.25,
+        emi: 15729,
+        apr: 8.34,
+        foir: 38.1,
+        esignComplete: false,
+        kfsLanguage: 'EN'
+      }
+    };
+
+    // English/Hindi translations dictionary for KFS
+    const kfsTranslations = {
+      EN: {
+        headline: "Key Facts Statement - Personal Staff Loan",
+        th_amt: "Sanctioned Amount",
+        td_amt: "₹5,00,000",
+        th_apr: "Annual Percentage Rate (APR) %",
+        td_apr: "8.34% p.a. (all-inclusive)",
+        th_rate: "Floating Rate of Interest",
+        td_rate: "8.25% (NextBank RE benchmark + spread)",
+        th_tenure: "Loan Tenure",
+        td_tenure: "36 Months",
+        th_charges: "Fee breakdown (Processing + GST)",
+        td_charges: "₹590 (₹500 flat fee + 18% GST)",
+        th_penal: "Penal Charge policy",
+        td_penal: "₹500 flat fee per default cycle (Reasonable, non-capitalized)",
+        th_cooling: "Cooling-off / Exit Period"
+      },
+      HI: {
+        headline: "मुख्य तथ्य विवरण (KFS) - कर्मचारी व्यक्तिगत ऋण",
+        th_amt: "स्वीकृत ऋण राशि",
+        td_amt: "₹5,00,000 (पांच लाख रुपये)",
+        th_apr: "वार्षिक प्रतिशत दर (APR) %",
+        td_apr: "8.34% प्रति वर्ष (सभी शुल्कों सहित)",
+        th_rate: "अस्थिर ब्याज दर (Floating Rate)",
+        td_rate: "8.25% (नेक्स्टबैंक बेंचमार्क + स्प्रेड)",
+        th_tenure: "ऋण की अवधि",
+        td_tenure: "36 महीने",
+        th_charges: "शुल्क विवरण (प्रसंस्करण शुल्क + जीएसटी)",
+        td_charges: "₹590 (₹500 शुल्क + 18% जीएसटी)",
+        th_penal: "दंडात्मक प्रभार नीति",
+        td_penal: "₹500 प्रति डिफ़ॉल्ट चक्र (तर्कसंगत और गैर-पूंजीकृत)",
+        th_cooling: "कूलिंग-ऑफ / निकास अवधि"
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      calculateEMI();
+      setupSignaturePadDrawing();
+      
+      // Auto-save simulation
+      setInterval(() => {
+        const status = document.getElementById('save-status');
+        status.innerText = 'Saved to Cloud';
+        setTimeout(() => {
+          status.innerHTML = 'Auto-saved &bull; Live';
+        }, 1500);
+      }, 8000);
+    });
+
+    // Switch Persona Views
+    function switchPersona(persona) {
+      state.activePersona = persona;
+      
+      document.querySelectorAll('.persona-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-persona') === persona) tab.classList.add('active');
+      });
+
+      document.querySelectorAll('.workspace-section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(`persona-section-${persona}`).classList.remove('hidden');
+
+      if (persona === 'employee') {
+        setupStepUI();
+      }
+    }
+
+    // Step navigation controls
+    function proceedToStep(step) {
+      if (step > state.maxStepUnlocked) {
+        state.maxStepUnlocked = step;
+        const navItem = document.getElementById(`bar-seg-${step}`);
+        if (navItem) navItem.classList.add('unlocked');
+      }
+      
+      // Specfic step actions
+      if (step === 3) {
+        simulateHrmsApiLogs();
+      }
+      
+      state.currentStep = step;
+      setupStepUI();
+    }
+
+    function jumpToStep(step) {
+      if (step <= state.maxStepUnlocked) {
+        state.currentStep = step;
+        setupStepUI();
+      }
+    }
+
+    function setupStepUI() {
+      const step = state.currentStep;
+      
+      document.querySelectorAll('.step-form-container').forEach(form => form.classList.add('hidden'));
+      document.getElementById(`step-form-${step}`).classList.remove('hidden');
+
+      document.querySelectorAll('.stepper-sidebar .bar-segment').forEach(item => {
+        const itemStep = parseInt(item.getAttribute('data-step'));
+        item.classList.remove('active', 'completed');
+        
+        if (itemStep === step) {
+          item.classList.add('active');
+        } else if (itemStep < step) {
+          item.classList.add('completed');
+        }
+      });
+
+      // Update Step title text and progress bar fill
+      const stepNames = [
+        "",
+        "Access & Onboarding",
+        "Loan Application",
+        "Employment Verification",
+        "Credit & Bureau Risk",
+        "Eligibility Engine",
+        "HR Guarantee & KFS",
+        "Documents & eSign",
+        "Direct Disbursement",
+        "Repayment & Monitor"
+      ];
+      
+      const pct = Math.round((step / 9) * 100);
+      document.getElementById('stepper-active-title').innerText = `Step ${step} of 9: ${stepNames[step]}`;
+      document.getElementById('stepper-active-percent').innerText = `${pct}% Complete`;
+      document.getElementById('stepper-progress-fill').style.width = `${(step / 9) * 100}%`;
+
+      // Special action triggers on render
+      if (step === 8) {
+        triggerDisbursalIMPSAnimation();
+      }
+    }
+
+    // Live EMI math calculations
+    function calculateEMI() {
+      const amountSlider = document.getElementById('loan-amount-slider');
+      const tenureSlider = document.getElementById('loan-tenure-slider');
+      
+      if (!amountSlider || !tenureSlider) return;
+
+      const principal = parseFloat(amountSlider.value);
+      const tenure = parseFloat(tenureSlider.value);
+      
+      state.data.loanAmount = principal;
+      state.data.tenure = tenure;
+
+      document.getElementById('amount-val-display').innerText = `₹${principal.toLocaleString('en-IN')}`;
+      document.getElementById('tenure-val-display').innerText = `${tenure} Months`;
+
+      // Rates calculation based on variant
+      let r = 8.25;
+      if (state.data.variant === 'topup') r = 9.50;
+      if (state.data.variant === 'festive') r = 7.90;
+      
+      state.data.rate = r;
+      document.getElementById('live-rate-val').innerText = `${r}% p.a.`;
+
+      // EMI Formula = [P x R x (1+R)^N]/[((1+R)^N)-1]
+      const monthlyRate = (r / 12) / 100;
+      const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / (Math.pow(1 + monthlyRate, tenure) - 1);
+      
+      state.data.emi = Math.round(emi);
+      document.getElementById('live-emi-val').innerText = `₹${state.data.emi.toLocaleString('en-IN')}`;
+      
+      // APR estimation (principal + processing fee of 500)
+      const apr = ((state.data.emi * tenure - principal + 590) / principal / (tenure / 12)) * 100;
+      state.data.apr = (r + 0.09).toFixed(2); // Simplified realistic proxy
+      document.getElementById('live-apr-val').innerText = `${state.data.apr}% p.a.`;
+
+      // Update KFS statement table values
+      document.getElementById('kfs-td-amt').innerText = `₹${principal.toLocaleString('en-IN')}`;
+      document.getElementById('kfs-td-tenure').innerText = `${tenure} Months`;
+      document.getElementById('kfs-td-apr').innerText = `${state.data.apr}% p.a. (all-inclusive)`;
+      document.getElementById('kfs-td-rate').innerText = `${r}% (NextBank benchmark + spread)`;
+
+      // Update FOIR breakdown page values
+      document.getElementById('foir-new-emi').innerText = `₹${state.data.emi.toLocaleString('en-IN')}`;
+      const foir = ((30000 + state.data.emi) / 120000) * 100;
+      state.data.foir = foir.toFixed(1);
+      
+      const foirLbl = document.getElementById('foir-percentage');
+      if (foirLbl) {
+        foirLbl.innerText = `${state.data.foir}% vs 55% Cap`;
+        if (foir > 55) {
+          foirLbl.className = 'text-crimson';
+        } else {
+          foirLbl.className = 'text-emerald';
+        }
+      }
+
+      // Update Step 5 rules check value
+      const ruleFoir = document.getElementById('rule-foir-val');
+      if (ruleFoir) ruleFoir.innerText = `${state.data.foir}% vs 55.0%`;
+
+      // Update tables EMIs values
+      document.querySelectorAll('.table-emi-val').forEach(el => {
+        el.innerText = `₹${state.data.emi.toLocaleString('en-IN')}`;
+      });
+    }
+
+    function updateLoanVariant() {
+      const variant = document.getElementById('loan-variant').value;
+      state.data.variant = variant;
+      calculateEMI();
+    }
+
+    // HRMS Simulated logs timeline
+    function simulateHrmsApiLogs() {
+      const term = document.getElementById('hrms-api-terminal');
+      if (!term) return;
+      term.innerHTML = '';
+
+      const logs = [
+        "INIT: Connect SAP SuccessFactors integration node...",
+        "STATUS: Empanelled corporate TechVista Solutions verified.",
+        "QUERY: Fetch salary records for Priya Sharma (PAN: BHPPS8921K)...",
+        "FETCH: Net monthly salary matched average: ₹1,20,000.",
+        "VERIFY: DOJ matches May-2021. Active status approved.",
+        "COMPLIANT: EPFO passbook cross-check matched UAN 100982104921."
+      ];
+
+      logs.forEach((line, idx) => {
+        setTimeout(() => {
+          const div = document.createElement('div');
+          div.className = 'log-line';
+          div.innerHTML = `
+            <span class="timestamp">[13:34:${10 + idx}]</span>
+            <span class="${line.includes('matched') || line.includes('verified') ? 'success' : ''}">${line}</span>
+          `;
+          term.appendChild(div);
+          term.scrollTop = term.scrollHeight;
+        }, idx * 450);
+      });
+    }
+
+    // eSign Drawing canvas logic
+    let isDrawing = false;
+    let canvas, ctx;
+
+    function setupSignaturePadDrawing() {
+      canvas = document.getElementById('esign-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      
+      // Scaling for high DPI screens
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      window.addEventListener('mouseup', stopDrawing);
+
+      canvas.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        startDrawing({ clientX: t.clientX, clientY: t.clientY });
+      }, { passive: true });
+      
+      canvas.addEventListener('touchmove', (e) => {
+        const t = e.touches[0];
+        draw({ clientX: t.clientX, clientY: t.clientY });
+      }, { passive: true });
+      
+      canvas.addEventListener('touchend', stopDrawing);
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      const pos = getMousePos(canvas, e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const pos = getMousePos(canvas, e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    function clearSignatureCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function getMousePos(canvasDom, e) {
+      const rect = canvasDom.getBoundingClientRect();
+      const scaleX = canvasDom.width / rect.width;
+      const scaleY = canvasDom.height / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
+    }
+
+    function verifyEsignOtp() {
+      const otp = document.getElementById('aadhaar-esign-otp').value.trim();
+      if (otp.length !== 6 || isNaN(otp)) {
+        alert("Please enter a valid 6-digit Aadhaar OTP code sent to your registered mobile.");
+        return;
+      }
+      
+      state.data.esignComplete = true;
+      document.getElementById('btn-esign-continue').removeAttribute('disabled');
+      document.getElementById('aadhaar-otp-esign-group').innerHTML = `
+        <div class="status-check-badge active-success" style="padding: 12px; display: block; text-align: center;">
+          ✓ Aadhaar e-Sign Successful &bull; Digital Signature verified.
+        </div>
+      `;
+    }
+
+    // Step 8 Disbursal credit transfer animation
+    function triggerDisbursalIMPSAnimation() {
+      const header = document.getElementById('disburse-animation-header');
+      const desc = document.getElementById('disburse-animation-desc');
+      const card = document.getElementById('disburse-completed-success-card');
+      const btn = document.getElementById('btn-complete-disbursal');
+
+      setTimeout(() => {
+        header.innerText = "NSDL AML watchlist screening...";
+        desc.innerText = "Checking databases for AML sanctions, PEP registries, and adverse media...";
+      }, 1200);
+
+      setTimeout(() => {
+        header.innerText = "Initiating IMPS routing rails...";
+        desc.innerText = "Direct transaction without LSP/Pooling nodes (RBI Direct Crediting MD)...";
+      }, 2500);
+
+      setTimeout(() => {
+        document.getElementById('disburse-anim-container').classList.add('hidden');
+        card.classList.remove('hidden');
+        btn.removeAttribute('disabled');
+      }, 4200);
+    }
+
+    // State adjustments for KFS translation
+    function setKfsLanguage(lang) {
+      state.data.kfsLanguage = lang;
+      
+      document.querySelectorAll('.kfs-lang-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`lang-btn-${lang.toLowerCase()}`).classList.add('active');
+
+      const dict = kfsTranslations[lang];
+      document.getElementById('kfs-headline').innerText = dict.headline;
+      document.getElementById('kfs-th-amt').innerText = dict.th_amt;
+      document.getElementById('kfs-td-amt').innerText = dict.td_amt;
+      document.getElementById('kfs-th-apr').innerText = dict.th_apr;
+      document.getElementById('kfs-td-apr').innerText = dict.td_apr;
+      document.getElementById('kfs-th-rate').innerText = dict.th_rate;
+      document.getElementById('kfs-td-rate').innerText = dict.td_rate;
+      document.getElementById('kfs-th-tenure').innerText = dict.th_tenure;
+      document.getElementById('kfs-td-tenure').innerText = dict.td_tenure;
+      document.getElementById('kfs-th-charges').innerText = dict.th_charges;
+      document.getElementById('kfs-td-charges').innerText = dict.td_charges;
+      document.getElementById('kfs-th-penal').innerText = dict.th_penal;
+      document.getElementById('kfs-td-penal').innerText = dict.td_penal;
+      document.getElementById('kfs-th-cooling').innerText = dict.th_cooling;
+    }
+
+    // Step 9 portal cooling off triggers
+    function triggerCoolingOffExit() {
+      const confirmExit = confirm("Are you sure you want to exit the loan agreement? You must repay ₹5,00,000 (principal) + proportionate interest (₹112) instantly. No foreclosure fees apply.");
+      if (confirmExit) {
+        alert("Cooling-off exit transaction initiated. UTR generated: NB-REF-791A9. Repayment verified. Account terminated successfully.");
+        proceedToStep(1);
+      }
+    }
+
+    function triggerForecloseLoan() {
+      const confirmF = confirm("Repay the entire outstanding principal ₹5,00,000 instantly? In compliance with the RBI Fair Practices Code for floating rate personal loans, foreclosure charges are ₹0.00.");
+      if (confirmF) {
+        alert("Prepayment successful. Account settled. Term sheet closed.");
+        proceedToStep(1);
+      }
+    }
+
+    // Employer console actions
+    function approveHrGuarantee(id) {
+      const row = document.getElementById(`hr-row-${id}`);
+      const limit = row.querySelector('.hr-requested-limit').innerText;
+      
+      alert(`Guarantee mandate authorized. Payroll check-off approved for ₹${limit}. Digital certificate signed.`);
+      row.remove();
+      
+      // Update corporate headroom
+      const fill = document.getElementById('hr-exposure-fill');
+      const val = document.getElementById('hr-exposure-val');
+      
+      if (id === 'priya') {
+        val.innerText = "₹4.25 Cr / ₹5.00 Cr";
+        fill.style.width = "85%";
+        document.getElementById('rule-exposure-val').innerText = "₹4.25 Cr / ₹5.00 Cr";
+        document.getElementById('headroom-text').innerText = "Headroom remaining: ₹75,00,000";
+        document.getElementById('headroom-fill-bar').style.width = "85%";
+      }
+    }
+
+    function rejectHrGuarantee(id) {
+      const confirmReject = confirm(`Reject guarantee request for employee record? This will cancel the application queue.`);
+      if (confirmReject) {
+        document.getElementById(`hr-row-${id}`).remove();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDB Mongolia | Retail Onboarding</title>
+  <!-- Google Fonts: Outfit and Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       STEP 0: LANDING PAGE (TD Light Theme Style)
+       ========================================== -->
+  <div class="landing-page-container" id="landing-page">
+    <div class="landing-background-glows">
+      <div class="glow-1"></div>
+      <div class="glow-2"></div>
+    </div>
+    
+    <header class="landing-header">
+      <div class="landing-logo-group">
+        <img src="assets/tdb_logo.png" alt="TDB Logo" class="tdb-logo-landing">
+        <div class="logo-divider"></div>
+        <img src="assets/businessnext_logo.png" alt="BusinessNext Logo" class="bn-logo-landing">
+      </div>
+      <div class="landing-support">
+        <span data-translate="support_num">Support: +976 7011 1234</span>
+        <div class="lang-selector-mini" id="lang-switcher">
+          <span class="active" data-lang="EN">EN</span>
+          <span data-lang="MN">MN</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="landing-hero-section">
+      <span class="hero-badge" data-translate="retail_suite">RETAIL BANKING SUITE</span>
+      <h1 class="hero-title" data-translate="landing_title">Digital Retail Account Opening</h1>
+      <p class="hero-subtitle" data-translate="landing_subtitle">Open a premium, fully digital retail checking or savings account for your day-to-day banking. Fast online verification, automated document review, and secure biometrics.</p>
+      
+      <!-- What you need card -->
+      <div class="requirements-card">
+        <h3 class="req-card-title">
+          <span class="req-title-icon">📋</span> <span data-translate="req_title">What you will need to get started</span>
+        </h3>
+        
+        <div class="req-grid">
+          <div class="req-item">
+            <div class="req-num">1</div>
+            <div class="req-details">
+              <h4 data-translate="req_step1_title">Mobile & Registry Info</h4>
+              <p data-translate="req_step1_desc">Active mobile phone for OTP authentication and National Registration Number (Civil ID).</p>
+            </div>
+          </div>
+          <div class="req-item">
+            <div class="req-num">2</div>
+            <div class="req-details">
+              <h4 data-translate="req_step2_title">Identity Document</h4>
+              <p data-translate="req_step2_desc">Mongolian National ID Card (Primary), Passport, or Residence Permit for foreign nationals.</p>
+            </div>
+          </div>
+          <div class="req-item">
+            <div class="req-num">3</div>
+            <div class="req-details">
+              <h4 data-translate="req_step3_title">Demographics & Income</h4>
+              <p data-translate="req_step3_desc">Employment details, employer name, occupation status, and monthly income levels.</p>
+            </div>
+          </div>
+          <div class="req-item">
+            <div class="req-num">4</div>
+            <div class="req-details">
+              <h4 data-translate="req_step4_title">Security PIN & Signature</h4>
+              <p data-translate="req_step4_desc">Establish security codes, card delivery instructions, and draw signature for e-signing.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="req-footer">
+          <div class="req-time-info">
+            <span class="clock-icon">🕒</span>
+            <span data-translate="time_info">Time to complete: ~5 minutes</span>
+          </div>
+          <button type="button" class="btn btn-accent btn-large" id="btn-start-onboarding">
+            <span data-translate="start_app">Start Account Application</span> <span class="arrow-btn">→</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ==========================================
+       MAIN ONBOARDING LAYOUT (TD Corporate Light Theme)
+       ========================================== -->
+  <div class="app-container hidden" id="onboarding-layout">
+    
+    <!-- LEFT SIDEBAR: Stepper -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img src="assets/tdb_logo.png" alt="TDB Logo" class="tdb-logo-dash">
+          <div class="logo-divider"></div>
+          <img src="assets/businessnext_logo.png" alt="BusinessNext Logo" class="bn-logo-dash">
+        </div>
+        
+        <!-- Language Switcher in Dashboard Header -->
+        <div class="lang-switcher-dashboard" id="lang-switcher-dash">
+          <span class="active" data-lang="EN">EN</span>
+          <span data-lang="MN">MN</span>
+        </div>
+      </div>
+      
+      <nav class="stepper-nav">
+        <ul class="stepper-list">
+          <li class="step-item active" data-step="1">
+            <div class="step-icon">1</div>
+            <div class="step-details">
+              <span class="step-title" data-translate="step1_nav_title">Registration & OTP</span>
+              <span class="step-desc" data-translate="step1_nav_desc">Verify credentials & NRN</span>
+            </div>
+            <div class="step-status-dot"></div>
+          </li>
+          <li class="step-item locked" data-step="2">
+            <div class="step-icon">2</div>
+            <div class="step-details">
+              <span class="step-title" data-translate="step2_nav_title">Document Upload</span>
+              <span class="step-desc" data-translate="step2_nav_desc">Choose document & scan</span>
+            </div>
+            <div class="step-status-dot"></div>
+          </li>
+          <li class="step-item locked" data-step="3">
+            <div class="step-icon">3</div>
+            <div class="step-details">
+              <span class="step-title" data-translate="step3_nav_title">Personal Information</span>
+              <span class="step-desc" data-translate="step3_nav_desc">OCR review & profile</span>
+            </div>
+            <div class="step-status-dot"></div>
+          </li>
+          <li class="step-item locked" data-step="4">
+            <div class="step-icon">4</div>
+            <div class="step-details">
+              <span class="step-title" data-translate="step4_nav_title">Product Selection</span>
+              <span class="step-desc" data-translate="step4_nav_desc">Choose accounts & card options</span>
+            </div>
+            <div class="step-status-dot"></div>
+          </li>
+          <li class="step-item locked" data-step="5">
+            <div class="step-icon">5</div>
+            <div class="step-details">
+              <span class="step-title" data-translate="step5_nav_title">Biometric Liveness</span>
+              <span class="step-desc" data-translate="step5_nav_desc">Face match & checks</span>
+            </div>
+            <div class="step-status-dot"></div>
+          </li>
+          <li class="step-item locked" data-step="6">
+            <div class="step-icon">6</div>
+            <div class="step-details">
+              <span class="step-title" data-translate="step6_nav_title">Review & e-Sign</span>
+              <span class="step-desc" data-translate="step6_nav_desc">Sign agreements & submit</span>
+            </div>
+            <div class="step-status-dot"></div>
+          </li>
+        </ul>
+      </nav>
+      
+      <!-- Stepper Footer status -->
+      <div class="sidebar-footer">
+        <div class="metrics-card">
+          <div class="metrics-header">
+            <span data-translate="risk_unit_title">AI Risk Scoring Unit</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label" data-translate="metric_risk_lbl">Fraud Risk Level</span>
+            <span class="metric-val status-green" id="metric-risk" data-translate="unassessed">Unassessed</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label" data-translate="metric_stp_lbl">STP Check</span>
+            <span class="metric-val" id="metric-stp">--</span>
+          </div>
+          <div class="metric-progress-wrapper">
+            <div class="metric-progress-lbl" data-translate="metric_strength_lbl">Biometric Cleared Strength</div>
+            <div class="progress-bar-small">
+              <div class="progress-bar-small-fill" id="metric-progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="sidebar-progress-tracker-bottom">
+          <div class="progress-labels">
+            <span id="progress-percent">Step 1 of 6 (16%)</span>
+            <span id="step-percentage-numeric">16%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="main-progress-bar" style="width: 16.6%;"></div>
+          </div>
+        </div>
+        <p class="copyright">&copy; 2026 Trade & Development Bank Jsc. powered by BusinessNext</p>
+      </div>
+    </aside>
+    
+    <!-- MAIN CONTENT PANEL -->
+    <main class="main-content">
+      
+      <header class="main-content-header">
+        <div class="header-details-top">
+          <span class="onboarding-scope-label" data-translate="retail_onboarding_lbl">Retail Digital Onboarding</span>
+        </div>
+        <h2 id="step-main-title">Open Your Retail Account</h2>
+        <p id="step-main-desc">Open a business/retail account digitally in just a few minutes.</p>
+      </header>
+      
+      <!-- Split Form Steps Container -->
+      <div class="step-panels-container">
+        
+        <!-- STEP 1: MOBILE & OTP REGISTRATION -->
+        <section class="step-panel active" id="step-panel-1">
+          <div class="split-layout">
+            
+            <div class="illustration-side">
+              <div class="illustration-box">
+                <svg viewBox="0 0 200 200" fill="none" class="step-svg" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="100" cy="100" r="80" fill="rgba(0, 122, 0, 0.03)" />
+                  <circle cx="100" cy="100" r="60" stroke="rgba(0, 122, 0, 0.08)" stroke-width="1.5" stroke-dasharray="4 4" />
+                  
+                  <rect x="60" y="50" width="80" height="110" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                  <rect x="70" y="60" width="60" height="8" rx="2" fill="rgba(0, 122, 0, 0.15)" />
+                  <circle cx="100" cy="105" r="16" stroke="var(--td-green)" stroke-width="2" />
+                  <path d="M92 105 H108" stroke="var(--td-green)" stroke-width="2" />
+                  <path d="M100 97 V113" stroke="var(--td-green)" stroke-width="2" />
+                  
+                  <circle cx="100" cy="148" r="4" fill="#cbd5e1" />
+                </svg>
+                <div class="illustration-desc-box">
+                  <h4 data-translate="ill_step1_title">Mobile Verification</h4>
+                  <p data-translate="ill_step1_desc">Confirm identity credentials and link your personal mobile number to activate digital banking nodes securely.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-card-side">
+              <div class="form-card">
+                <div class="form-card-header">
+                  <h3 data-translate="form_step1_title">Mobile Registration</h3>
+                  <p data-translate="form_step1_desc">Provide your mobile number and National Registry Number to establish eligibility.</p>
+                </div>
+                
+                <div class="form-group">
+                  <label for="mobile-number"><span data-translate="mobile_lbl">Mobile Number</span> <span class="required">*</span></label>
+                  <div class="input-with-action">
+                    <div class="phone-prefix">+976</div>
+                    <input type="tel" id="mobile-number" class="form-control" placeholder="Mobile Number (e.g. 99123456)">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-send-otp" data-translate="send_otp">Send OTP</button>
+                  </div>
+                </div>
+                
+                <div class="form-group hidden" id="otp-group">
+                  <label><span data-translate="otp_lbl">OTP Verification Code</span> <span class="required">*</span></label>
+                  <div class="otp-input-container">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="0">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="1">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="2">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="3">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="4">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="5">
+                  </div>
+                  <div class="otp-actions">
+                    <span id="otp-timer" data-translate="otp_timer_lbl">Resend code in 60s</span>
+                    <button type="button" class="btn-link hidden" id="btn-resend-otp" data-translate="resend_otp">Resend Code</button>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="nrn-number"><span data-translate="nrn_lbl">National Registry Number (Civil ID)</span> <span class="required">*</span></label>
+                  <div class="input-icon-wrapper">
+                    <input type="text" id="nrn-number" class="form-control uppercase" placeholder="e.g. УУ95120612">
+                    <span class="validation-status-icon" id="nrn-validation-icon"></span>
+                  </div>
+                  <small class="form-hint" data-translate="nrn_hint">Format: 2 Cyrillic characters followed by 8 digits</small>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- STEP 2: DOCUMENT UPLOAD & OCR -->
+        <section class="step-panel" id="step-panel-2">
+          <div class="split-layout">
+            
+            <div class="illustration-side">
+              <div class="illustration-box">
+                <svg viewBox="0 0 200 200" fill="none" class="step-svg" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Abstract scanner lines -->
+                  <circle cx="100" cy="100" r="75" fill="rgba(0, 122, 0, 0.02)"/>
+                  <rect x="40" y="65" width="120" height="75" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                  <rect x="52" y="77" width="26" height="26" rx="4" fill="rgba(0, 122, 0, 0.1)"/>
+                  <line x1="88" y1="82" x2="140" y2="82" stroke="#cbd5e1" stroke-width="2.5"/>
+                  <line x1="88" y1="92" x2="130" y2="92" stroke="#cbd5e1" stroke-width="2.5"/>
+                  
+                  <path d="M30 100 H170" stroke="var(--td-mint)" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M30 100 L45 85 M170 100 L155 115" stroke="var(--td-mint)" stroke-width="2"/>
+                </svg>
+                <div class="illustration-desc-box">
+                  <h4 data-translate="ill_step2_title">OCR Scanning</h4>
+                  <p data-translate="ill_step2_desc">Our OCR algorithm automatically reads and parses Mongolian Cyrillic characters to pre-fill identity entries.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-card-side">
+              <div class="form-card">
+                <div class="form-card-header">
+                  <h3 data-translate="form_step2_title">Document Verification</h3>
+                  <p data-translate="form_step2_desc">Upload valid document credentials for automated OCR metadata extraction.</p>
+                </div>
+                
+                <div class="form-group">
+                  <label><span data-translate="doc_type_lbl">Document Type</span> <span class="required">*</span></label>
+                  <div class="doc-type-selectors">
+                    <label class="doc-type-card active">
+                      <input type="radio" name="doc-type" value="national_id" checked>
+                      <span class="doc-type-icon">💳</span>
+                      <span class="doc-type-lbl" data-translate="national_id_lbl">National ID</span>
+                    </label>
+                    <label class="doc-type-card">
+                      <input type="radio" name="doc-type" value="passport">
+                      <span class="doc-type-icon">📘</span>
+                      <span class="doc-type-lbl" data-translate="passport_lbl">Passport</span>
+                    </label>
+                    <label class="doc-type-card">
+                      <input type="radio" name="doc-type" value="residence_permit">
+                      <span class="doc-type-icon">🛡️</span>
+                      <span class="doc-type-lbl" data-translate="permit_lbl">Permit</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="upload-drag-area" id="doc-upload-area">
+                  <div class="upload-graphic">📂</div>
+                  <div class="upload-texts">
+                    <p class="upload-main-text" data-translate="upload_drag_lbl">Upload front & back files</p>
+                    <p class="upload-sub-text" data-translate="upload_hint_lbl">Drag & drop PNG/PDF up to 10MB</p>
+                  </div>
+                  <input type="file" id="file-uploader" class="hidden" multiple>
+                </div>
+                
+                <div class="uploaded-files-list hidden" id="files-list"></div>
+                
+                <div class="ai-status-card mt-15">
+                  <div class="ai-card-title">✦ <span data-translate="ai_chk_ocr">OCR Extraction Check</span></div>
+                  <ul class="ai-check-list">
+                    <li class="pending" id="ai-check-ocr">
+                      <span class="check-bullet"></span>
+                      <span class="check-text" data-translate="ocr_text">OCR Identity Data Extraction</span>
+                      <span class="check-status" data-translate="pending">Pending</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- STEP 5: BIOMETRIC SELFIE & LIVENESS -->
+        <section class="step-panel" id="step-panel-5">
+          <div class="split-layout">
+            
+            <div class="illustration-side">
+              <div class="illustration-box">
+                <svg viewBox="0 0 200 200" fill="none" class="step-svg" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="100" cy="100" r="75" fill="rgba(0, 122, 0, 0.02)"/>
+                  <circle cx="100" cy="90" r="30" stroke="#cbd5e1" stroke-width="2"/>
+                  <path d="M60 155 C60 120, 140 120, 140 155" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+                  
+                  <path d="M100 50 L100 130 M60 90 L140 90" stroke="var(--td-mint)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                  <circle cx="100" cy="90" r="45" stroke="var(--td-mint)" stroke-width="1.5"/>
+                </svg>
+                <div class="illustration-desc-box">
+                  <h4 data-translate="ill_step3_title">Biometrics & AML</h4>
+                  <p data-translate="ill_step3_desc">Live facial detection compares selfie biometrics with document photo, running cross-checks against duplicate databases.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-card-side">
+              <div class="form-card">
+                <div class="form-card-header">
+                  <h3 data-translate="form_step3_title">Selfie Liveness Capture</h3>
+                  <p data-translate="form_step3_desc">Provide biometric facial confirmation to run fraud and AML screenings.</p>
+                </div>
+                
+                <div class="selfie-module">
+                  <div class="camera-viewport-container">
+                    <video id="webcam" class="hidden" autoplay playsinline></video>
+                    <canvas id="selfie-canvas" class="selfie-overlay"></canvas>
+                    
+                    <div class="camera-placeholder" id="camera-placeholder">
+                      <div class="placeholder-icon">📸</div>
+                      <button type="button" class="btn btn-primary btn-sm" id="btn-activate-camera" data-translate="activate_cam">Activate Camera Feed</button>
+                    </div>
+                    
+                    <div class="liveness-guidance hidden" id="liveness-guide">
+                      <span id="liveness-prompt-text" data-translate="align_face">Align face in frame</span>
+                    </div>
+                    
+                    <div class="capture-success-overlay hidden" id="capture-success">
+                      <div class="success-checkmark-circle">✓</div>
+                      <h3 data-translate="liveness_ok">Liveness Verified</h3>
+                      <p id="liveness-score-lbl">Score: 99.8%</p>
+                    </div>
+                  </div>
+                  
+                  <div class="camera-actions">
+                    <button type="button" class="btn btn-secondary btn-sm hidden" id="btn-capture-selfie" data-translate="capture">Capture</button>
+                    <button type="button" class="btn btn-outline btn-sm hidden" id="btn-retake-selfie" data-translate="retake">Retake</button>
+                  </div>
+                </div>
+                
+                <div class="ai-status-card mt-15">
+                  <div class="ai-card-title">✦ <span data-translate="ai_chk_bio">Biometric Checklists</span></div>
+                  <ul class="ai-check-list">
+                    <li class="pending" id="ai-check-face">
+                      <span class="check-bullet"></span>
+                      <span class="check-text" data-translate="face_match_text">Biometric Face Matching (ID vs Selfie)</span>
+                      <span class="check-status" data-translate="pending">Pending</span>
+                    </li>
+                    <li class="pending" id="ai-check-dup">
+                      <span class="check-bullet"></span>
+                      <span class="check-text" data-translate="dup_text">Database Duplicate Clearance</span>
+                      <span class="check-status" data-translate="pending">Pending</span>
+                    </li>
+                    <li class="pending" id="ai-check-aml">
+                      <span class="check-bullet"></span>
+                      <span class="check-text" data-translate="aml_text">AML Database Watchlist Check</span>
+                      <span class="check-status" data-translate="pending">Pending</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- STEP 3: PERSONAL PROFILE DETAILS -->
+        <section class="step-panel" id="step-panel-3">
+          <div class="split-layout">
+            
+            <div class="illustration-side">
+              <div class="illustration-box">
+                <svg viewBox="0 0 200 200" fill="none" class="step-svg" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="100" cy="100" r="75" fill="rgba(0, 122, 0, 0.02)"/>
+                  <rect x="50" y="45" width="100" height="110" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                  <line x1="70" y1="65" x2="130" y2="65" stroke="var(--td-green)" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="70" y1="80" x2="110" y2="80" stroke="#cbd5e1" stroke-width="2.5"/>
+                  <line x1="70" y1="95" x2="120" y2="95" stroke="#cbd5e1" stroke-width="2.5"/>
+                  <line x1="70" y1="110" x2="105" y2="110" stroke="#cbd5e1" stroke-width="2.5"/>
+                  
+                  <circle cx="130" cy="130" r="20" fill="rgba(0, 176, 116, 0.15)"/>
+                  <path d="M124 130 L128 134 L136 126" stroke="var(--td-mint)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="illustration-desc-box">
+                  <h4 data-translate="ill_step4_title">Demographics Registry</h4>
+                  <p data-translate="ill_step4_desc">Review the database metadata parsed by OCR. Fill out contact fields to finalize demographics profile.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-card-side">
+              <div class="form-card">
+                <div class="form-card-header">
+                  <h3 data-translate="form_step4_title">Personal Information</h3>
+                  <p data-translate="form_step4_desc">Verify extracted details and supply demographic and occupation settings.</p>
+                </div>
+                
+                <div class="ai-autofill-banner">
+                  <div class="banner-icon">🤖</div>
+                  <div class="banner-content">
+                    <strong data-translate="banner_autofill_title">Auto-extracted from Documents</strong>
+                    <p data-translate="banner_autofill_desc">Double check OCR data. Fields highlighted in gold are extracted.</p>
+                  </div>
+                </div>
+                
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="p-fullname"><span data-translate="fullname_lbl">Full Name (Latin)</span> <span class="required">*</span></label>
+                    <input type="text" id="p-fullname" class="form-control ai-extracted" placeholder="Full Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="p-dob"><span data-translate="dob_lbl">Date of Birth</span> <span class="required">*</span></label>
+                    <input type="date" id="p-dob" class="form-control ai-extracted">
+                  </div>
+                </div>
+                
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="p-gender"><span data-translate="gender_lbl">Gender</span> <span class="required">*</span></label>
+                    <select id="p-gender" class="form-control ai-extracted">
+                      <option value="">Select Gender</option>
+                      <option value="Male" data-translate="gender_male">Male</option>
+                      <option value="Female" data-translate="gender_female">Female</option>
+                      <option value="Other" data-translate="gender_other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="p-nationality"><span data-translate="nationality_lbl">Nationality</span> <span class="required">*</span></label>
+                    <input type="text" id="p-nationality" class="form-control ai-extracted" value="Mongolian">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="p-address"><span data-translate="address_lbl">Residential Address</span> <span class="required">*</span></label>
+                  <div class="input-icon-wrapper">
+                    <input type="text" id="p-address" class="form-control ai-extracted" placeholder="Full Address">
+                    <button type="button" class="input-btn" id="btn-suggest-address" data-translate="locate">Locate</button>
+                  </div>
+                </div>
+                
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="p-email"><span data-translate="email_lbl">Email Address</span> <span class="required">*</span></label>
+                    <input type="email" id="p-email" class="form-control" placeholder="email@address.mn">
+                  </div>
+                  <div class="form-group">
+                    <label for="p-phone" data-translate="phone_lbl">Verified Phone Number</label>
+                    <input type="tel" id="p-phone" class="form-control" readonly disabled>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="p-employment"><span data-translate="employment_lbl">Employment Status</span> <span class="required">*</span></label>
+                  <select id="p-employment" class="form-control">
+                    <option value="Employed" data-translate="emp_employed">Employed (Full-time)</option>
+                    <option value="Self-Employed" data-translate="emp_self">Self-Employed / Owner</option>
+                    <option value="Unemployed" data-translate="emp_unemp">Unemployed</option>
+                    <option value="Student" data-translate="emp_student">Student</option>
+                    <option value="Retired" data-translate="emp_retired">Retired</option>
+                  </select>
+                </div>
+                
+                <div class="form-group" id="group-employer">
+                  <label for="p-employer"><span data-translate="employer_lbl">Employer Name</span> <span class="required">*</span></label>
+                  <input type="text" id="p-employer" class="form-control" placeholder="Company Name">
+                </div>
+                
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="p-occupation"><span data-translate="occupation_lbl">Occupation</span> <span class="required">*</span></label>
+                    <input type="text" id="p-occupation" class="form-control" placeholder="Job Title">
+                  </div>
+                  <div class="form-group">
+                    <label for="p-income"><span data-translate="income_lbl">Monthly Income (MNT)</span> <span class="required">*</span></label>
+                    <select id="p-income" class="form-control">
+                      <option value="under_1m" data-translate="inc_low">Under 1,500,000 ₮</option>
+                      <option value="1m_3m" data-translate="inc_mid" selected>1,500,000 ₮ - 3,500,000 ₮</option>
+                      <option value="3m_7m" data-translate="inc_high">3,500,000 ₮ - 7,000,000 ₮</option>
+                      <option value="over_7m" data-translate="inc_highest">Over 7,000,000 ₮</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="p-lang" data-translate="pref_lang_lbl">Language Preference</label>
+                    <select id="p-lang" class="form-control">
+                      <option value="MN" data-translate="lang_mn">Mongolian</option>
+                      <option value="EN" data-translate="lang_en">English</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="p-branch" data-translate="pref_branch_lbl">Home Branch</label>
+                    <select id="p-branch" class="form-control">
+                      <option value="HQ" data-translate="branch_hq">Sukhbaatar Square HQ</option>
+                      <option value="west" data-translate="branch_west">West Crossroad Branch</option>
+                      <option value="erdenet" data-translate="branch_erd">Orkhon Erdenet Branch</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- STEP 4: PRODUCT SELECTION & ACCOUNT PREFERENCES -->
+        <section class="step-panel" id="step-panel-4">
+          <div class="split-layout">
+            
+            <div class="illustration-side">
+              <div class="illustration-box">
+                <div class="product-visualizer-sidebar">
+                  <!-- Custom Promo Offer banner replacing instantly-generated Visa card visualizer -->
+                  <div class="promo-offer-card-sidebar">
+                    <div class="promo-header">
+                      <span class="promo-sparkle">✨</span>
+                      <strong data-translate="promo_offer_title">Exclusive Offer</strong>
+                    </div>
+                    
+                    <div class="debit-card-visualizer gold-theme" style="margin: 12px 0; aspect-ratio: 1.586 / 1;">
+                      <div class="card-header-v">
+                        <span class="card-brand">TD Gold Credit</span>
+                        <span class="card-chip"></span>
+                      </div>
+                      <div class="card-number-v" style="font-size: 13px;">Pre-approved Limit: 5,000,000 ₮</div>
+                      <div class="card-footer-v">
+                        <div class="card-holder-v">TD PLATINUM CLUB</div>
+                        <div class="card-type-logo">VISA</div>
+                      </div>
+                    </div>
+                    
+                    <p class="promo-desc-sidebar" data-translate="promo_offer_desc">Based on your credit bureau profiles, you are pre-approved for an optional gold credit card line. Interest rate: 1.4% monthly. Zero setup fees.</p>
+                  </div>
+                  
+                  <div class="cross-sells-container mt-15">
+                    <h4 class="cross-sell-title" data-translate="offers_title">Pre-Qualified Offers</h4>
+                    <div class="cross-sell-item">
+                      <div class="cross-sell-icon">💳</div>
+                      <div class="cross-sell-details">
+                        <h5 data-translate="cc_offer_title">TD Credit Card Eligibility</h5>
+                        <p><span data-translate="cc_limit">Approved limit:</span> <strong>5,000,000 ₮</strong></p>
+                      </div>
+                      <label class="switch">
+                        <input type="checkbox" id="offer-credit-card">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-card-side">
+              <div class="form-card">
+                <div class="form-card-header">
+                  <h3 data-translate="form_step5_title">Product Selection</h3>
+                  <p data-translate="form_step5_desc">Choose checking/savings packets and link virtual/physical debit cards.</p>
+                </div>
+                
+                <div class="ai-recommendation-block">
+                  <div class="recommendation-badge" data-translate="rec_tag">✦ PREFERRED VALUE COMBO</div>
+                  <div class="recommendation-flex">
+                    <div class="rec-details">
+                      <h3 data-translate="rec_bundle_title">Premium Savings Bundle matched</h3>
+                      <p data-translate="rec_bundle_desc">12.5% annual rate + physical card + mobile banking.</p>
+                    </div>
+                    <button type="button" class="btn btn-accent btn-sm" id="btn-apply-rec" data-translate="apply_pack">Apply Pack</button>
+                  </div>
+                </div>
+                
+                <h3 class="panel-section-title" data-translate="sect_accounts">1. Everyday Account Products</h3>
+                <div class="products-grid">
+                  <div class="product-card selected" data-product="savings_acct">
+                    <div class="card-checkbox">✓</div>
+                    <div class="card-icon-round">💰</div>
+                    <div>
+                      <h4 data-translate="premium_savings_title">Premium Savings Account</h4>
+                      <p class="product-description" data-translate="premium_savings_desc">Earn yield paid monthly. Zero setup fees.</p>
+                      <div class="product-feature-tag" data-translate="premium_savings_rate">12.5% interest rate</div>
+                    </div>
+                  </div>
+                  <div class="product-card" data-product="salary_acct">
+                    <div class="card-checkbox"></div>
+                    <div class="card-icon-round">💼</div>
+                    <div>
+                      <h4 data-translate="salary_acct_title">Salary Account</h4>
+                      <p class="product-description" data-translate="salary_acct_desc">Receive payroll directly, zero commission internal routing.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <h3 class="panel-section-title" data-translate="sect_card_ops">2. Debit Card & Digital Services</h3>
+                <div class="sub-selections-container">
+                  <div class="sub-selection-row">
+                    <div class="selector-info">
+                      <strong data-translate="card_format_title">Card Form Factor</strong>
+                      <p data-translate="card_format_desc">Pick physical, virtual, or both formats</p>
+                    </div>
+                    <div class="switch-selector-buttons">
+                      <button type="button" class="btn-toggle active" data-target="card_type" data-val="virtual" data-translate="toggle_virt">Virtual</button>
+                      <button type="button" class="btn-toggle" data-target="card_type" data-val="both" data-translate="toggle_both">Both</button>
+                      <button type="button" class="btn-toggle" data-target="card_type" data-val="none" data-translate="toggle_none">None</button>
+                    </div>
+                  </div>
+                  <div class="sub-selection-row">
+                    <div class="selector-info">
+                      <strong data-translate="digital_add_title">Digital Banking Add-ons</strong>
+                      <p data-translate="digital_add_desc">Select free e-services to activate</p>
+                    </div>
+                    <div class="checkbox-group-row">
+                      <label class="custom-checkbox">
+                        <input type="checkbox" id="srv-mobile" checked>
+                        <span class="checkbox-box"></span> <span data-translate="srv_app">App</span>
+                      </label>
+                      <label class="custom-checkbox">
+                        <input type="checkbox" id="srv-net" checked>
+                        <span class="checkbox-box"></span> <span data-translate="srv_net">Net</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <h3 class="panel-section-title" data-translate="sect_currencies">3. Currencies & Security preferences</h3>
+                <div class="form-group">
+                  <label><span data-translate="account_curr_lbl">Primary Account Currency</span> <span class="required">*</span></label>
+                  <div class="currency-chips">
+                    <label class="currency-chip active">
+                      <input type="radio" name="currency" value="MNT" checked>
+                      <span>₮ MNT</span>
+                    </label>
+                    <label class="currency-chip">
+                      <input type="radio" name="currency" value="USD">
+                      <span>$ USD</span>
+                    </label>
+                    <label class="currency-chip">
+                      <input type="radio" name="currency" value="EUR">
+                      <span>€ EUR</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="pref-nickname" data-translate="account_nick_lbl">Account Description / Name (Optional)</label>
+                  <input type="text" id="pref-nickname" class="form-control" placeholder="e.g. Salary Wallet">
+                </div>
+                
+                <div class="form-group">
+                  <label><span data-translate="card_deliv_lbl">Card Delivery Choice</span> <span class="required">*</span></label>
+                  <div class="delivery-selectors">
+                    <label class="delivery-card active" id="delivery-branch-option">
+                      <input type="radio" name="delivery" value="branch" checked>
+                      <div class="delivery-icon">🏛️</div>
+                      <div class="delivery-info">
+                        <strong data-translate="deliv_branch_title">Collect at Preferred Branch</strong>
+                        <small data-translate="deliv_branch_desc">Card is waiting for checkout at HQ square</small>
+                      </div>
+                    </label>
+                    <label class="delivery-card" id="delivery-home-option">
+                      <input type="radio" name="delivery" value="home">
+                      <div class="delivery-icon">🏠</div>
+                      <div class="delivery-info">
+                        <strong data-translate="deliv_home_title">Courier Home Dispatch</strong>
+                        <small data-translate="deliv_home_desc">Ships to residential address details (1-3 days)</small>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="delivery-details-box" id="delivery-branch-details">
+                  <strong data-translate="pickup_loc_title">Pickup location:</strong>
+                  <p id="selected-branch-display">Sukhbaatar Square HQ (Ulaanbaatar)</p>
+                </div>
+                
+                <div class="delivery-details-box hidden" id="delivery-home-details">
+                  <strong data-translate="courier_addr_title">Courier Address:</strong>
+                  <p id="selected-address-display">--</p>
+                </div>
+                
+                <!-- PIN setup removed per security guidelines -->
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- STEP 6: REVIEW & E-SIGN -->
+        <section class="step-panel" id="step-panel-6">
+          <div class="split-layout">
+            
+            <div class="illustration-side">
+              <div class="illustration-box">
+                <svg viewBox="0 0 200 200" fill="none" class="step-svg" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="100" cy="100" r="75" fill="rgba(0, 122, 0, 0.02)"/>
+                  <path d="M60 40 H140 V160 H60 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                  <line x1="80" y1="70" x2="120" y2="70" stroke="#cbd5e1" stroke-width="3"/>
+                  <line x1="80" y1="90" x2="110" y2="90" stroke="#cbd5e1" stroke-width="3"/>
+                  
+                  <path d="M70 135 C90 135, 90 145, 120 138" stroke="var(--td-green)" stroke-width="2.5" stroke-linecap="round"/>
+                  <circle cx="120" cy="138" r="3" fill="var(--td-green)"/>
+                </svg>
+                <div class="illustration-desc-box">
+                  <h4 data-translate="ill_step6_title">Application Check</h4>
+                  <p data-translate="ill_step6_desc">Take a moment to review all summarized parameters before e-signing and executing.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-card-side">
+              <div class="form-card">
+                <div class="form-card-header">
+                  <h3 data-translate="form_step6_title">Review & Digital Sign</h3>
+                  <p data-translate="form_step6_desc">Ensure details are accurate and draw signature to submit registration.</p>
+                </div>
+                
+                <div class="summary-card">
+                  <div class="summary-section">
+                    <div class="summary-sec-header">
+                      <span data-translate="sum_sec1">1. DEMOGRAPHICS & PROFILE</span>
+                      <button type="button" class="btn-link-edit" data-target-step="3" data-translate="edit">Edit</button>
+                    </div>
+                    <div class="summary-details-grid">
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_name">Name:</span> <strong id="sum-name">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_nrn">NRN / DOB:</span> <strong id="sum-nrn">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_address">Address:</span> <strong id="sum-address">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_contact">Contact:</span> <strong id="sum-contact">--</strong></div>
+                    </div>
+                  </div>
+                  
+                  <div class="summary-section">
+                    <div class="summary-sec-header">
+                      <span data-translate="sum_sec2">2. SELECTED PRODUCTS</span>
+                      <button type="button" class="btn-link-edit" data-target-step="4" data-translate="edit">Edit</button>
+                    </div>
+                    <div class="summary-details-grid">
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_prod">Deposit:</span> <strong id="sum-product">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_card">Debit Card:</span> <strong id="sum-card">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_extra">Add-ons:</span> <strong id="sum-extra">--</strong></div>
+                    </div>
+                  </div>
+                  
+                  <div class="summary-section">
+                    <div class="summary-sec-header">
+                      <span data-translate="sum_sec3">3. SETTINGS & DISPATCH</span>
+                      <button type="button" class="btn-link-edit" data-target-step="4" data-translate="edit">Edit</button>
+                    </div>
+                    <div class="summary-details-grid">
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_tax">Tax Country:</span> <strong id="sum-tax">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_pref">Currency / Hub:</span> <strong id="sum-pref">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_delivery">Card Handover:</span> <strong id="sum-delivery">--</strong></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="terms-conditions-viewer-box mt-15">
+                  <h4 data-translate="disclosures_title">Retail Banking Disclosures</h4>
+                  <p data-translate="disclosures_desc">By signing, you warrant that all information submitted is correct. You authorize TDB to open accounts and agree to Electronic Signature Acts.</p>
+                </div>
+                
+
+                
+                <div class="otp-confirmation-block mt-15">
+                  <label class="custom-checkbox align-start">
+                    <input type="checkbox" id="terms-accept">
+                    <span class="checkbox-box mt-4"></span>
+                    <div class="checkbox-label-text">
+                      <strong data-translate="terms_accept_lbl">I execute this onboarding packet. <span class="required">*</span></strong>
+                    </div>
+                  </label>
+                </div>
+                
+                <!-- Compliance Watchlist statuses in review page -->
+                <div class="compliance-scorecard-card mt-15">
+                  <div class="scorecard-header">
+                    <span data-translate="sec_status_title">Compliance Declarations Risk Status</span>
+                    <span class="badge badge-success" data-translate="cleared">CLEARED</span>
+                  </div>
+                  <div class="scorecard-grid">
+                    <div class="scorecard-metric">
+                      <span class="score-lbl" data-translate="fatca_status">FATCA Status</span>
+                      <strong class="score-val text-green" data-translate="passed">Passed</strong>
+                    </div>
+                    <div class="scorecard-metric">
+                      <span class="score-lbl" data-translate="pep_status">PEP Screening</span>
+                      <strong class="score-val text-green" data-translate="cleared">Cleared</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- STEP 7: ACCOUNT SUCCESS -->
+        <section class="step-panel" id="step-panel-7">
+          <canvas id="confetti-canvas" class="confetti-overlay"></canvas>
+          
+          <div class="success-screen-layout">
+            <div class="success-illustration-area">
+              <div class="success-check-pulse">
+                <svg class="success-checkmark" viewBox="0 0 52 52">
+                  <circle class="success-checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                  <path class="success-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+              </div>
+            </div>
+            
+            <div class="success-headline">
+              <h2 data-translate="success_title">Account Activated Successfully</h2>
+              <p data-translate="success_desc">Onboarding complete. Your retail account details are ready below.</p>
+            </div>
+            
+            <div class="account-profile-card">
+              <div class="profile-header-r">
+                <div class="avatar-lbl">👤</div>
+                <div class="name-status">
+                  <h4 id="success-name">--</h4>
+                  <span class="badge badge-success" data-translate="active_badge">Account Active</span>
+                </div>
+              </div>
+              <div class="profile-details-grid">
+                <div class="profile-item"><span class="p-lbl" data-translate="p_account">IBAN / Account Number</span> <strong class="p-val" id="success-account-num">--</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_cif">Customer CIF ID</span> <strong class="p-val" id="success-cif">--</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_card">Virtual Card Node</span> <strong class="p-val text-green" data-translate="p_card_ready">Ready</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_notice">Delivery Notice</span> <strong class="p-val" id="success-delivery-notice">--</strong></div>
+              </div>
+            </div>
+            
+            <div class="next-steps-container">
+              <h4 class="next-title" data-translate="next_title">Next Steps</h4>
+              <div class="next-steps-timeline">
+                <div class="timeline-item">
+                  <div class="timeline-icon">📱</div>
+                  <div class="timeline-content">
+                    <h5 data-translate="next_app_title">Install TD Mobile</h5>
+                    <p data-translate="next_app_desc">Log in with your phone and secure CIF ID code.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="success-actions-row">
+              <button type="button" class="btn btn-primary" id="btn-download-kit" data-translate="btn_kit">📥 Welcome Kit</button>
+              <button type="button" class="btn btn-secondary" id="btn-fund-account" data-translate="btn_fund">💳 Fund Account</button>
+            </div>
+          </div>
+        </section>
+        
+      </div>
+      
+      <!-- FOOTER ACTIONS NAVIGATION -->
+      <footer class="content-footer" id="footer-actions">
+        <button type="button" class="btn btn-outline" id="btn-prev" disabled data-translate="btn_back">Back</button>
+        <div class="footer-right-buttons">
+          <button type="button" class="btn btn-outline" id="btn-save" data-translate="btn_save">Save & Continue Later</button>
+          <button type="button" class="btn btn-primary" id="btn-next" data-translate="btn_continue">Continue</button>
+        </div>
+      </footer>
+      
+    </main>
+  </div>
+
+  <!-- Custom Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Javascript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
