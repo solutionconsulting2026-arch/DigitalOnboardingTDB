@@ -1940,9 +1940,14 @@ input:checked + .slider:before { transform: translateX(14px); }
     justify-content: center;
   }
   
+  body {
+    background-color: #ffffff;
+  }
+
   .app-container {
     flex-direction: column;
     overflow-y: auto;
+    background-color: #ffffff;
   }
   
   .sidebar {
@@ -1978,18 +1983,20 @@ input:checked + .slider:before { transform: translateX(14px); }
   .main-content {
     height: auto;
     overflow-y: visible;
+    background-color: #ffffff;
   }
   
   .main-content-header {
-    padding: 16px 20px;
+    padding: 20px 20px 4px 20px;
+    border-bottom: none;
   }
   
   .main-content-header h2 {
-    font-size: 18px;
+    font-size: 20px;
   }
   
   .step-panels-container {
-    padding: 16px 20px;
+    padding: 8px 20px 32px 20px;
     overflow-y: visible;
   }
   
@@ -2007,8 +2014,41 @@ input:checked + .slider:before { transform: translateX(14px); }
   }
   
   .form-card {
-    padding: 20px;
-    gap: 14px;
+    padding: 0;
+    gap: 16px;
+    border: none;
+    box-shadow: none;
+    background-color: #ffffff;
+  }
+
+  .form-card-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .form-card-header h3 {
+    font-size: 14px;
+  }
+
+  /* Responsive action input buttons */
+  .input-with-action {
+    gap: 8px;
+  }
+
+  .input-with-action .form-control {
+    padding-right: 12px !important;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .input-with-action .btn {
+    position: static !important;
+    white-space: nowrap;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px !important;
   }
   
   .form-row-2 {
