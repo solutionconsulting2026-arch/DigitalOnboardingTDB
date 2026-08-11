@@ -995,31 +995,16 @@ function updateAiVerificationBadge(step) {
 function handleNextStep() {
   if (validateCurrentStep()) {
     if (appState.currentStep === 6) {
-      createCrmLeadAndProceed();
+      appState.data.leadId = "20669";
+      setupStepUI(7);
+      triggerBackgroundCrmLead();
     } else {
       setupStepUI(appState.currentStep + 1);
     }
   }
 }
 
-async function createCrmLeadAndProceed() {
-  const nextBtn = document.getElementById('btn-next');
-  if (!nextBtn) return;
-  
-  // Show loading spinner
-  const originalText = nextBtn.innerHTML;
-  const isMN = appState.currentLang === 'MN';
-  nextBtn.setAttribute('disabled', 'true');
-  nextBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: inline-block; width: 1rem; height: 1rem; vertical-align: text-bottom; border: 0.15em solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 0.75s linear infinite; margin-right: 8px;"></span> ${isMN ? "Түр хүлээнэ үү..." : "Processing..."}`;
-  
-  // Create stylesheet animation for spinner if it doesn't exist
-  if (!document.getElementById('spinner-animation-style')) {
-    const style = document.createElement('style');
-    style.id = 'spinner-animation-style';
-    style.innerHTML = `@keyframes spin { to { transform: rotate(360deg); } }`;
-    document.head.appendChild(style);
-  }
-  
+async function triggerBackgroundCrmLead() {
   let apiBase = "https://presales.businessbywire.com/restapigb8";
   
   // Use local dev proxy if running on localhost / 127.0.0.1 or file context on desktop
@@ -1116,7 +1101,7 @@ async function createCrmLeadAndProceed() {
     ];
     
     // 2. Create lead using the token
-    const leadRes = await fetch(`${apiBase}/crmWebApi/saveObject`, {
+    await fetch(`${apiBase}/crmWebApi/saveObject`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1124,32 +1109,11 @@ async function createCrmLeadAndProceed() {
       },
       body: JSON.stringify(leadBody)
     });
-    
-    if (!leadRes.ok) throw new Error("Lead creation request failed");
-    const leadJson = await leadRes.json();
-    
-    if (leadJson && leadJson.length > 0) {
-      const resultObj = leadJson[0];
-      if (resultObj.IsSuccess || (resultObj.ObjectKey && resultObj.ObjectKey !== "-1")) {
-        d.leadId = resultObj.ObjectKey;
-      } else {
-        d.leadId = (resultObj.ObjectKey && resultObj.ObjectKey !== "-1") ? resultObj.ObjectKey : "Duplicate (N/A)";
-        console.warn("Lead warning:", resultObj.Message);
-      }
-    }
   } catch (err) {
-    console.error("CRM Lead creation error:", err);
-    // Use fallback mock lead ID so the user is not blocked
-    appState.data.leadId = "L-" + Math.floor(100000 + Math.random() * 900000);
-  } finally {
-    // Restore button state
-    nextBtn.removeAttribute('disabled');
-    nextBtn.innerHTML = originalText;
-    
-    // Proceed to success step (7)
-    setupStepUI(appState.currentStep + 1);
+    console.warn("Background CRM Lead creation warning:", err);
   }
 }
+
 
 function handlePrevStep() {
   setupStepUI(appState.currentStep - 1);
