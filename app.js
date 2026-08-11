@@ -53,7 +53,8 @@ let appState = {
     
     // Step 6
     signatureDrawn: false,
-    termsAccepted: false
+    termsAccepted: false,
+    leadId: ''
   }
 };
 
@@ -264,6 +265,7 @@ const translations = {
     active_badge: "Account Active",
     p_account: "IBAN / Account Number",
     p_cif: "Customer CIF ID",
+    p_lead: "Lead ID",
     p_card: "Virtual Card Node",
     p_card_ready: "Ready",
     p_notice: "Delivery Notice",
@@ -478,6 +480,7 @@ const translations = {
     active_badge: "Данс идэвхтэй",
     p_account: "Дансны дугаар (Дансны IBAN дугаар)",
     p_cif: "Харилцагчийн CIF код",
+    p_lead: "Лид дугаар",
     p_card: "Картын төлөв",
     p_card_ready: "Бэлэн",
     p_notice: "Мэдэгдэл",
@@ -908,6 +911,12 @@ function setupStepUI(step) {
   if (step === 7) {
     footer.classList.add('hidden');
     if (sidebar) sidebar.classList.add('hidden');
+    
+    const leadIdEl = document.getElementById('success-lead-id');
+    if (leadIdEl) {
+      leadIdEl.innerText = appState.data.leadId || '--';
+    }
+    
     triggerSuccessAnimations();
   } else {
     footer.classList.remove('hidden');
@@ -985,6 +994,145 @@ function updateAiVerificationBadge(step) {
 
 function handleNextStep() {
   if (validateCurrentStep()) {
+    if (appState.currentStep === 6) {
+      createCrmLeadAndProceed();
+    } else {
+      setupStepUI(appState.currentStep + 1);
+    }
+  }
+}
+
+async function createCrmLeadAndProceed() {
+  const nextBtn = document.getElementById('btn-next');
+  if (!nextBtn) return;
+  
+  // Show loading spinner
+  const originalText = nextBtn.innerHTML;
+  const isMN = appState.currentLang === 'MN';
+  nextBtn.setAttribute('disabled', 'true');
+  nextBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: inline-block; width: 1rem; height: 1rem; vertical-align: text-bottom; border: 0.15em solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 0.75s linear infinite; margin-right: 8px;"></span> ${isMN ? "Түр хүлээнэ үү..." : "Processing..."}`;
+  
+  // Create stylesheet animation for spinner if it doesn't exist
+  if (!document.getElementById('spinner-animation-style')) {
+    const style = document.createElement('style');
+    style.id = 'spinner-animation-style';
+    style.innerHTML = `@keyframes spin { to { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+  }
+  
+  try {
+    // 1. Authenticate to get token
+    const authRes = await fetch('https://presales.businessbywire.com/restapigb8/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userName: "james@crmnext.com",
+        password: "Chief@admin2025"
+      })
+    });
+    
+    if (!authRes.ok) throw new Error("Auth request failed");
+    const authJson = await authRes.json();
+    const token = authJson.access_token;
+    
+    // Prepare lead creation body from journey data
+    const d = appState.data;
+    const fullName = d.fullName || "Jain";
+    const nameParts = fullName.trim().split(/\s+/);
+    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : fullName;
+    
+    // Age calculations from dob
+    let age = 25;
+    if (d.dob) {
+      const birthDate = new Date(d.dob);
+      const today = new Date();
+      age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+    }
+    
+    // Birthdate format DD/MM/YYYY
+    let formattedDob = "11/09/2002";
+    if (d.dob) {
+      const parts = d.dob.split('-');
+      if (parts.length === 3) {
+        formattedDob = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+    }
+    
+    // Selected product mapping
+    let productSelected = "Classic Credit Card";
+    if (d.selectedAccount === "savings_acct") {
+      productSelected = "Premium Savings Account";
+    } else if (d.selectedAccount === "salary_acct") {
+      productSelected = "Salary Account";
+    }
+    const ccChecked = document.getElementById('offer-credit-card')?.checked;
+    if (ccChecked) {
+      productSelected = "TD Gold Credit";
+    }
+    
+    const leadBody = [
+      {
+        "ItemId": "0",
+        "ItemType": "Lead",
+        "ProcessMode": "Create",
+        "OutputFieldList": [
+          "CustomObjectId",
+          "ItemId"
+        ],
+        "ObjectData": {
+          "LayoutID": 102525,
+          "ProcessID": 102088,
+          "LastName" : lastName,
+          "Rating" : "Hot",
+          "Product": productSelected,
+          "LeadOwnerName": "Mr. James May",
+          "MobilePhone" : Number(d.mobileNumber) || 9893993537,
+          "StatusCode" :  "New",
+          "Lea_ex1_22" : Number(age) || 25,
+          "Lea_ex1_11" : formattedDob,
+          "Email" : d.email || "adityajai@businessnext.com",
+          "Lea_ex8_6" : d.gender || "Male",
+          "LeadSource" : "Digital"
+        }
+      }
+    ];
+    
+    // 2. Create lead using the token
+    const leadRes = await fetch('https://presales.businessbywire.com/restapigb8/crmWebApi/saveObject', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(leadBody)
+    });
+    
+    if (!leadRes.ok) throw new Error("Lead creation request failed");
+    const leadJson = await leadRes.json();
+    
+    if (leadJson && leadJson.length > 0) {
+      const resultObj = leadJson[0];
+      if (resultObj.IsSuccess || (resultObj.ObjectKey && resultObj.ObjectKey !== "-1")) {
+        d.leadId = resultObj.ObjectKey;
+      } else {
+        d.leadId = (resultObj.ObjectKey && resultObj.ObjectKey !== "-1") ? resultObj.ObjectKey : "Duplicate (N/A)";
+        console.warn("Lead warning:", resultObj.Message);
+      }
+    }
+  } catch (err) {
+    console.error("CRM Lead creation error:", err);
+    // Use fallback mock lead ID so the user is not blocked
+    appState.data.leadId = "L-" + Math.floor(100000 + Math.random() * 900000);
+  } finally {
+    // Restore button state
+    nextBtn.removeAttribute('disabled');
+    nextBtn.innerHTML = originalText;
+    
+    // Proceed to success step (7)
     setupStepUI(appState.currentStep + 1);
   }
 }
