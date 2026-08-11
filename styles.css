@@ -2221,3 +2221,227 @@ input:checked + .slider:before { transform: translateX(14px); }
     width: calc(100% - 32px);
   }
 }
+
+/* ==========================================
+   LOAN JOURNEY & CALCULATOR COMPONENTS
+   ========================================== */
+.loan-calculator-widget {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.slider-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.slider-header-row span {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.slider-header-row strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--td-accent-gold);
+}
+
+.range-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  background: #e2e8f0;
+  -webkit-appearance: none;
+  margin: 8px 0;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--td-green);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease;
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.slider-limits {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.emi-summary-box {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.emi-box-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--td-green-dark);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+}
+
+.emi-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 12px;
+}
+
+.emi-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.emi-detail-item span {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.emi-detail-item strong {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.highlight-gold {
+  color: var(--td-accent-gold) !important;
+}
+
+/* KFS Table styling */
+.kfs-container-box {
+  border: 1.5px solid var(--td-green-dark);
+  border-radius: 8px;
+  background: white;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.kfs-table-header {
+  background: var(--td-green-dark);
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kfs-table-header h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.kfs-table-element {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  text-align: left;
+}
+
+.kfs-table-element th, .kfs-table-element td {
+  border-bottom: 1px solid var(--border-color);
+  padding: 8px 12px;
+}
+
+.kfs-table-element th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+  color: var(--text-main);
+  width: 40%;
+}
+
+.kfs-table-element tr:last-child td, .kfs-table-element tr:last-child th {
+  border-bottom: none;
+}
+
+/* Eligibility components */
+.eligibility-rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.rule-checker-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rule-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rule-name-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.rule-status-chip {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.chip-passed {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.rule-value-desc {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.preapproved-offer-card {
+  border: 1.5px solid var(--td-accent-gold);
+  border-radius: 10px;
+  padding: 16px;
+  background-color: rgba(220, 161, 36, 0.03);
+  text-align: center;
+  margin-top: 16px;
+}
+
+.preapproved-offer-card h4 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--td-green-dark);
+  margin-bottom: 8px;
+}

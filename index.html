@@ -244,8 +244,53 @@
             <div class="form-card-side">
               <div class="form-card">
                 <div class="form-card-header">
-                  <h3 data-translate="form_step1_title">Mobile Registration</h3>
-                  <p data-translate="form_step1_desc">Provide your mobile number and National Registry Number to establish eligibility.</p>
+                  <h3 data-translate="form_step1_title">Configure Loan Request</h3>
+                  <p data-translate="form_step1_desc">Set your desired loan amount and tenure, and verify your mobile number.</p>
+                </div>
+                
+                <!-- Loan Calculator Widget -->
+                <div class="loan-calculator-widget">
+                  <div class="form-group">
+                    <div class="slider-header-row">
+                      <span data-translate="loan_amt_slider_lbl">Desired Loan Amount</span>
+                      <strong id="loan-amount-display">5,000,000 MNT</strong>
+                    </div>
+                    <input type="range" id="loan-amount-slider" class="range-slider" min="500000" max="25000000" step="500000" value="5000000">
+                    <div class="slider-limits">
+                      <span>500,000 MNT</span>
+                      <span>25,000,000 MNT</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="slider-header-row">
+                      <span data-translate="loan_tenure_slider_lbl">Repayment Tenure Choice</span>
+                      <strong id="loan-tenure-display">12 Months</strong>
+                    </div>
+                    <input type="range" id="loan-tenure-slider" class="range-slider" min="6" max="36" step="6" value="12">
+                    <div class="slider-limits">
+                      <span>6 Months</span>
+                      <span>36 Months</span>
+                    </div>
+                  </div>
+
+                  <div class="emi-summary-box">
+                    <h5 class="emi-box-title" data-translate="emi_calc_header">Estimated Repayment Details</h5>
+                    <div class="emi-details-grid">
+                      <div class="emi-detail-item">
+                        <span data-translate="interest_rate_lbl">Interest Rate (Standard)</span>
+                        <strong>18.5% p.a.</strong>
+                      </div>
+                      <div class="emi-detail-item">
+                        <span data-translate="est_emi_lbl">Monthly Payment (EMI)</span>
+                        <strong id="emi-amount-val" class="highlight-gold">459,444 MNT</strong>
+                      </div>
+                      <div class="emi-detail-item">
+                        <span data-translate="flat_fee_lbl">One-time Processing Fee</span>
+                        <strong>15,000 MNT</strong>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
                 <div class="form-group">
@@ -349,6 +394,21 @@
                 </div>
                 
                 <div class="uploaded-files-list hidden" id="files-list"></div>
+                
+                <!-- Income Statement Upload Area -->
+                <div class="form-group mt-15">
+                  <label><span data-translate="upload_income_lbl">Upload Income / Bank Statement</span> <span class="required">*</span></label>
+                  <div class="upload-drag-area" id="income-upload-area" style="position: relative; overflow: hidden; margin-top: 8px;">
+                    <div class="upload-graphic">📊</div>
+                    <div class="upload-texts">
+                      <p class="upload-main-text" data-translate="upload_income_lbl">Upload Income / Bank Statement</p>
+                      <p class="upload-sub-text" data-translate="upload_income_hint">Upload your latest salary slip or bank statement PDF/JPG</p>
+                    </div>
+                    <input type="file" id="income-uploader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;">
+                  </div>
+                </div>
+                
+                <div class="uploaded-files-list hidden" id="income-files-list"></div>
                 
                 <div class="ai-status-card mt-15">
                   <div class="ai-card-title">✦ <span data-translate="ai_chk_ocr">OCR Extraction Check</span></div>
@@ -550,17 +610,25 @@
                 
                 <div class="form-row-2">
                   <div class="form-group">
-                    <label for="p-occupation"><span data-translate="occupation_lbl">Occupation</span> <span class="required">*</span></label>
+                    <div class="slider-header-row">
+                      <label for="p-occupation"><span data-translate="occupation_lbl">Occupation</span> <span class="required">*</span></label>
+                    </div>
                     <input type="text" id="p-occupation" class="form-control" placeholder="Job Title">
                   </div>
                   <div class="form-group">
-                    <label for="p-income"><span data-translate="income_lbl">Monthly Income (MNT)</span> <span class="required">*</span></label>
-                    <select id="p-income" class="form-control">
-                      <option value="under_1m" data-translate="inc_low">Under 1,500,000 ₮</option>
-                      <option value="1m_3m" data-translate="inc_mid" selected>1,500,000 ₮ - 3,500,000 ₮</option>
-                      <option value="3m_7m" data-translate="inc_high">3,500,000 ₮ - 7,000,000 ₮</option>
-                      <option value="over_7m" data-translate="inc_highest">Over 7,000,000 ₮</option>
-                    </select>
+                    <label for="p-income"><span data-translate="income_lbl">Net Monthly Salary (MNT)</span> <span class="required">*</span></label>
+                    <input type="number" id="p-income" class="form-control" placeholder="e.g. 2500000" value="2500000">
+                  </div>
+                </div>
+                
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="p-work-tenure">Work Tenure (Years) <span class="required">*</span></label>
+                    <input type="number" id="p-work-tenure" class="form-control" placeholder="e.g. 2" value="2">
+                  </div>
+                  <div class="form-group">
+                    <label for="p-salary-acct"><span data-translate="salary_acct_lbl">Salary Repayment Account</span> <span class="required">*</span></label>
+                    <input type="text" id="p-salary-acct" class="form-control" placeholder="e.g. 5001234567" value="5001234567">
                   </div>
                 </div>
                 
@@ -594,41 +662,37 @@
             <div class="illustration-side">
               <div class="illustration-box">
                 <div class="product-visualizer-sidebar">
-                  <!-- Custom Promo Offer banner replacing instantly-generated Visa card visualizer -->
                   <div class="promo-offer-card-sidebar">
                     <div class="promo-header">
-                      <span class="promo-sparkle">✨</span>
-                      <strong data-translate="promo_offer_title">Exclusive Offer</strong>
+                      <span class="promo-sparkle">✦</span>
+                      <strong data-translate="assess_title">Credit Assessment</strong>
                     </div>
                     
-                    <div class="debit-card-visualizer gold-theme" style="margin: 12px 0; aspect-ratio: 1.586 / 1;">
-                      <div class="card-header-v">
-                        <span class="card-brand">TD Gold Credit</span>
-                        <span class="card-chip"></span>
+                    <!-- Credit Score Indicator -->
+                    <div style="text-align: center; margin: 16px 0; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 12px; background: white;">
+                      <div style="font-size: 28px; font-weight: 800; color: var(--success-color);">745</div>
+                      <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 4px;" data-translate="bureau_score_lbl">Credit Bureau Score</div>
+                    </div>
+                    
+                    <!-- Rules checker grid -->
+                    <div class="eligibility-rules-grid">
+                      <div class="rule-checker-card">
+                        <div class="rule-header-row">
+                          <span class="rule-name-text">FOIR / DTI</span>
+                          <span class="rule-status-chip chip-passed" data-translate="status_passed">PASSED</span>
+                        </div>
+                        <div class="rule-value-desc" id="foir-display-val">18.4%</div>
                       </div>
-                      <div class="card-number-v" style="font-size: 13px;">Pre-approved Limit: 5,000,000 ₮</div>
-                      <div class="card-footer-v">
-                        <div class="card-holder-v">TD PLATINUM CLUB</div>
-                        <div class="card-type-logo">VISA</div>
+                      <div class="rule-checker-card">
+                        <div class="rule-header-row">
+                          <span class="rule-name-text" data-translate="salary_title">Monthly Salary</span>
+                          <span class="rule-status-chip chip-passed" data-translate="status_passed">PASSED</span>
+                        </div>
+                        <div class="rule-value-desc" id="monthly-salary-display-val">2.5M MNT</div>
                       </div>
                     </div>
                     
-                    <p class="promo-desc-sidebar" data-translate="promo_offer_desc">Based on your credit bureau profiles, you are pre-approved for an optional gold credit card line. Interest rate: 1.4% monthly. Zero setup fees.</p>
-                  </div>
-                  
-                  <div class="cross-sells-container mt-15">
-                    <h4 class="cross-sell-title" data-translate="offers_title">Pre-Qualified Offers</h4>
-                    <div class="cross-sell-item">
-                      <div class="cross-sell-icon">💳</div>
-                      <div class="cross-sell-details">
-                        <h5 data-translate="cc_offer_title">TD Credit Card Eligibility</h5>
-                        <p><span data-translate="cc_limit">Approved limit:</span> <strong>5,000,000 ₮</strong></p>
-                      </div>
-                      <label class="switch">
-                        <input type="checkbox" id="offer-credit-card">
-                        <span class="slider round"></span>
-                      </label>
-                    </div>
+                    <p class="promo-desc-sidebar" style="font-size: 11px; color: var(--text-secondary);" data-translate="assess_desc">Our credit engine successfully queried the national registry and credit bureau databases. You qualify for our preferred retail lending tier.</p>
                   </div>
                 </div>
               </div>
@@ -637,97 +701,62 @@
             <div class="form-card-side">
               <div class="form-card">
                 <div class="form-card-header">
-                  <h3 data-translate="form_step5_title">Product Selection</h3>
-                  <p data-translate="form_step5_desc">Choose checking/savings packets and link virtual/physical debit cards.</p>
+                  <h3 data-translate="form_step5_title">Credit Offer Approved</h3>
+                  <p data-translate="form_step5_desc">Review your approved credit parameters and adjust your final loan limits.</p>
                 </div>
                 
-                <div class="ai-recommendation-block">
-                  <div class="recommendation-badge" data-translate="rec_tag">✦ PREFERRED VALUE COMBO</div>
-                  <div class="recommendation-flex">
-                    <div class="rec-details">
-                      <h3 data-translate="rec_bundle_title">Premium Savings Bundle matched</h3>
-                      <p data-translate="rec_bundle_desc">12.5% annual rate + physical card + mobile banking.</p>
-                    </div>
-                    <button type="button" class="btn btn-accent btn-sm" id="btn-apply-rec" data-translate="apply_pack">Apply Pack</button>
-                  </div>
+                <div class="preapproved-offer-card">
+                  <h4 data-translate="preapproved_title">Approved Personal Loan Offer</h4>
+                  <div style="font-size: 22px; font-weight: 800; color: var(--td-accent-gold); margin: 6px 0;" id="approved-max-display">12,000,000 MNT</div>
+                  <p style="font-size: 11px; color: var(--text-muted); margin: 0;" data-translate="preapproved_desc">Maximum pre-approved loan limit based on salary and debt check.</p>
                 </div>
-                
-                <h3 class="panel-section-title" data-translate="sect_accounts">1. Everyday Account Products</h3>
-                <div class="products-grid">
-                  <div class="product-card selected" data-product="savings_acct">
-                    <div class="card-checkbox">✓</div>
-                    <div class="card-icon-round">💰</div>
-                    <div>
-                      <h4 data-translate="premium_savings_title">Premium Savings Account</h4>
-                      <p class="product-description" data-translate="premium_savings_desc">Earn yield paid monthly. Zero setup fees.</p>
-                      <div class="product-feature-tag" data-translate="premium_savings_rate">12.5% interest rate</div>
+
+                <!-- Custom Slider Adjusters -->
+                <div class="loan-calculator-widget" style="margin-top: 20px;">
+                  <div class="form-group">
+                    <div class="slider-header-row">
+                      <span data-translate="adj_amt_lbl">Adjust Final Loan Amount</span>
+                      <strong id="final-loan-amount-display">5,000,000 MNT</strong>
+                    </div>
+                    <input type="range" id="final-loan-amount-slider" class="range-slider" min="500000" max="12000000" step="500000" value="5000000">
+                    <div class="slider-limits">
+                      <span>500,000 MNT</span>
+                      <span id="final-slider-max-lbl">12,000,000 MNT</span>
                     </div>
                   </div>
-                  <div class="product-card" data-product="salary_acct">
-                    <div class="card-checkbox"></div>
-                    <div class="card-icon-round">💼</div>
-                    <div>
-                      <h4 data-translate="salary_acct_title">Salary Account</h4>
-                      <p class="product-description" data-translate="salary_acct_desc">Receive payroll directly, zero commission internal routing.</p>
+
+                  <div class="form-group">
+                    <div class="slider-header-row">
+                      <span data-translate="adj_tenure_lbl">Adjust Final Tenure</span>
+                      <strong id="final-loan-tenure-display">12 Months</strong>
+                    </div>
+                    <input type="range" id="final-loan-tenure-slider" class="range-slider" min="6" max="36" step="6" value="12">
+                    <div class="slider-limits">
+                      <span>6 Months</span>
+                      <span>36 Months</span>
                     </div>
                   </div>
-                </div>
-                
-                <h3 class="panel-section-title" data-translate="sect_card_ops">2. Debit Card & Digital Services</h3>
-                <div class="sub-selections-container">
-                  <div class="sub-selection-row">
-                    <div class="selector-info">
-                      <strong data-translate="card_format_title">Card Form Factor</strong>
-                      <p data-translate="card_format_desc">Pick physical, virtual, or both formats</p>
-                    </div>
-                    <div class="switch-selector-buttons">
-                      <button type="button" class="btn-toggle active" data-target="card_type" data-val="virtual" data-translate="toggle_virt">Virtual</button>
-                      <button type="button" class="btn-toggle" data-target="card_type" data-val="both" data-translate="toggle_both">Both</button>
-                      <button type="button" class="btn-toggle" data-target="card_type" data-val="none" data-translate="toggle_none">None</button>
-                    </div>
-                  </div>
-                  <div class="sub-selection-row">
-                    <div class="selector-info">
-                      <strong data-translate="digital_add_title">Digital Banking Add-ons</strong>
-                      <p data-translate="digital_add_desc">Select free e-services to activate</p>
-                    </div>
-                    <div class="checkbox-group-row">
-                      <label class="custom-checkbox">
-                        <input type="checkbox" id="srv-mobile" checked>
-                        <span class="checkbox-box"></span> <span data-translate="srv_app">App</span>
-                      </label>
-                      <label class="custom-checkbox">
-                        <input type="checkbox" id="srv-net" checked>
-                        <span class="checkbox-box"></span> <span data-translate="srv_net">Net</span>
-                      </label>
+
+                  <div class="emi-summary-box" style="margin-top: 15px; background: var(--bg-secondary);">
+                    <h5 class="emi-box-title" data-translate="emi_calc_header">Final Repayment Details</h5>
+                    <div class="emi-details-grid">
+                      <div class="emi-detail-item">
+                        <span data-translate="interest_rate_lbl">Interest Rate</span>
+                        <strong>18.5% p.a.</strong>
+                      </div>
+                      <div class="emi-detail-item">
+                        <span data-translate="est_emi_lbl">Monthly EMI</span>
+                        <strong id="final-emi-amount-val" class="highlight-gold">459,444 MNT</strong>
+                      </div>
+                      <div class="emi-detail-item">
+                        <span data-translate="flat_fee_lbl">Processing Fee</span>
+                        <strong>15,000 MNT</strong>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <h3 class="panel-section-title" data-translate="sect_currencies">3. Currencies & Security preferences</h3>
-                <div class="form-group">
-                  <label><span data-translate="account_curr_lbl">Primary Account Currency</span> <span class="required">*</span></label>
-                  <div class="currency-chips">
-                    <label class="currency-chip active">
-                      <input type="radio" name="currency" value="MNT" checked>
-                      <span>₮ MNT</span>
-                    </label>
-                    <label class="currency-chip">
-                      <input type="radio" name="currency" value="USD">
-                      <span>$ USD</span>
-                    </label>
-                    <label class="currency-chip">
-                      <input type="radio" name="currency" value="EUR">
-                      <span>€ EUR</span>
-                    </label>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label for="pref-nickname" data-translate="account_nick_lbl">Account Description / Name (Optional)</label>
-                  <input type="text" id="pref-nickname" class="form-control" placeholder="e.g. Salary Wallet">
-                </div>
-                
+                <h3 class="panel-section-title" data-translate="sect_branch_ops">Preferred Branch for Loan Servicing</h3>
                 <div class="form-group">
                   <label><span data-translate="card_deliv_lbl">Card Delivery Choice</span> <span class="required">*</span></label>
                   <div class="delivery-selectors">
@@ -799,48 +828,96 @@
                 <div class="summary-card">
                   <div class="summary-section">
                     <div class="summary-sec-header">
-                      <span data-translate="sum_sec1">1. DEMOGRAPHICS & PROFILE</span>
+                      <span data-translate="sum_sec1">1. DEMOGRAPHICS & INCOME</span>
                       <button type="button" class="btn-link-edit" data-target-step="3" data-translate="edit">Edit</button>
                     </div>
                     <div class="summary-details-grid">
                       <div class="summary-item"><span class="sum-label" data-translate="sum_name">Name:</span> <strong id="sum-name">--</strong></div>
                       <div class="summary-item"><span class="sum-label" data-translate="sum_nrn">NRN / DOB:</span> <strong id="sum-nrn">--</strong></div>
                       <div class="summary-item"><span class="sum-label" data-translate="sum_address">Address:</span> <strong id="sum-address">--</strong></div>
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_contact">Contact:</span> <strong id="sum-contact">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_tax">Employer Name:</span> <strong id="sum-tax">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="income_lbl">Monthly Salary:</span> <strong id="sum-salary">--</strong></div>
                     </div>
                   </div>
                   
                   <div class="summary-section">
                     <div class="summary-sec-header">
-                      <span data-translate="sum_sec2">2. SELECTED PRODUCTS</span>
+                      <span data-translate="sum_sec2">2. APPROVED LOAN DETAILS</span>
                       <button type="button" class="btn-link-edit" data-target-step="4" data-translate="edit">Edit</button>
                     </div>
                     <div class="summary-details-grid">
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_prod">Deposit:</span> <strong id="sum-product">--</strong></div>
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_card">Debit Card:</span> <strong id="sum-card">--</strong></div>
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_extra">Add-ons:</span> <strong id="sum-extra">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_prod">Loan Amount:</span> <strong id="sum-product">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_card">Loan Tenure:</span> <strong id="sum-card">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_extra">Monthly Payment (EMI):</span> <strong id="sum-extra" class="highlight-gold">--</strong></div>
                     </div>
                   </div>
                   
                   <div class="summary-section">
                     <div class="summary-sec-header">
-                      <span data-translate="sum_sec3">3. SETTINGS & DISPATCH</span>
+                      <span data-translate="sum_sec3">3. REPAYMENT & SERVICING PREFERENCES</span>
                       <button type="button" class="btn-link-edit" data-target-step="4" data-translate="edit">Edit</button>
                     </div>
                     <div class="summary-details-grid">
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_tax">Tax Country:</span> <strong id="sum-tax">--</strong></div>
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_pref">Currency / Hub:</span> <strong id="sum-pref">--</strong></div>
-                      <div class="summary-item"><span class="sum-label" data-translate="sum_delivery">Card Handover:</span> <strong id="sum-delivery">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_pref">Repayment Account:</span> <strong id="sum-pref">--</strong></div>
+                      <div class="summary-item"><span class="sum-label" data-translate="sum_delivery">Preferred Branch:</span> <strong id="sum-delivery">--</strong></div>
                     </div>
                   </div>
                 </div>
                 
-                <div class="terms-conditions-viewer-box mt-15">
-                  <h4 data-translate="disclosures_title">Retail Banking Disclosures</h4>
-                  <p data-translate="disclosures_desc">By signing, you warrant that all information submitted is correct. You authorize TDB to open accounts and agree to Electronic Signature Acts.</p>
+                <!-- Key Facts Statement (KFS) -->
+                <div class="kfs-container-box mt-15">
+                  <div class="kfs-table-header">
+                    <h4 data-translate="kfs_headline">Key Facts Statement (KFS)</h4>
+                    <span style="font-size: 9px; font-weight: 800; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px;">TDB Retail Loan</span>
+                  </div>
+                  <table class="kfs-table-element">
+                    <tr>
+                      <th data-translate="kfs_th_amt">Principal Amount</th>
+                      <td id="kfs-val-principal">--</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_rate">Interest Rate (Annual)</th>
+                      <td>18.5% p.a.</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_apr">Annual Percentage Rate (APR) %</th>
+                      <td>18.5%</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_tenure">Total Repayment Tenure</th>
+                      <td id="kfs-val-tenure">--</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_charges">Fee / Disbursal Charges</th>
+                      <td data-translate="kfs_flat_fee">15,000 MNT processing fee</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_penal">Late Repayment Penalties</th>
+                      <td data-translate="kfs_penal_desc">0.1% daily penal fee on overdue amount</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_cooling">Cooling-off Period</th>
+                      <td data-translate="kfs_cooling_desc">24 hours standard window</td>
+                    </tr>
+                    <tr>
+                      <th data-translate="kfs_th_grievance">Grievance Support Email</th>
+                      <td data-translate="kfs_grievance_desc">grievance@tdbm.mn</td>
+                    </tr>
+                  </table>
                 </div>
-                
 
+                <div class="terms-conditions-viewer-box mt-15">
+                  <h4 data-translate="disclosures_title">Loan Agreement Declarations</h4>
+                  <p data-translate="disclosures_desc">By signing, you warrant that all information submitted is correct. You authorize TDB to pull credit checks and automatically deduct loan installments from salary.</p>
+                </div>
+                
+                <div class="signature-canvas-container mt-15" style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: white;">
+                  <div style="background: var(--bg-secondary); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--text-main);" data-translate="signature_lbl">Draw your digital signature</span>
+                    <button type="button" class="btn btn-secondary btn-xs" id="btn-clear-sig">Clear</button>
+                  </div>
+                  <canvas id="signature-pad" style="width: 100%; height: 120px; display: block; cursor: crosshair; background: white;"></canvas>
+                </div>
                 
                 <div class="otp-confirmation-block mt-15">
                   <label class="custom-checkbox align-start">

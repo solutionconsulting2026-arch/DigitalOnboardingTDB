@@ -17,7 +17,12 @@ let appState = {
     selfieCaptured: false,
     selfieData: null,
     
-    // Step 4
+    // Step 1 Loan Settings
+    loanAmount: 5000000, // 5M MNT default
+    loanTenure: 12,      // 12 months default
+    calculatedEmi: 0,
+    
+    // Step 3 Employment Profile
     fullName: '',
     dob: '',
     gender: '',
@@ -27,31 +32,19 @@ let appState = {
     employmentStatus: 'Employed',
     employerName: '',
     occupation: '',
-    monthlyIncome: '1m_3m',
+    workTenure: '2', // default 2 years
+    monthlyIncome: 2500000, // net income in MNT
+    salaryAccount: '', // existing account
     prefLanguage: 'MN',
     prefBranch: 'HQ',
     
-    // Step 5
-    selectedAccount: 'savings_acct',
-    cardFormFactor: 'virtual', // virtual, both, none
-    digitalServices: {
-      mobile: true,
-      internet: true,
-      sms: true
-    },
-    offerCreditCard: false,
-    offerDeposit: false,
-    accountCurrency: 'MNT',
-    accountNickname: '',
-    commPreferences: {
-      sms: true,
-      email: true,
-      push: false
-    },
-    deliveryMethod: 'branch', // branch, home
-    securityPin: '',
+    // Step 4 Approved Offer Details
+    approvedLimit: 8000000,
+    selectedAmount: 5000000,
+    selectedTenure: 12,
+    foirRatio: 0,
     
-    // Step 6
+    // Step 6 Terms & Sign
     signatureDrawn: false,
     termsAccepted: false,
     leadId: ''
@@ -63,33 +56,33 @@ const translations = {
   EN: {
     support_num: "Support: +976 7011 1234",
     retail_suite: "RETAIL BANKING SUITE",
-    landing_title: "Digital Retail Account Opening",
-    landing_subtitle: "Open a premium, fully digital retail checking or savings account for your day-to-day banking. Fast online verification, automated document review, and secure biometrics.",
+    landing_title: "Digital Personal Loan Application",
+    landing_subtitle: "Apply for a personal loan completely online with TDB. Fast online verification, automated credit scoring, and instant disbursement to your salary account.",
     req_title: "What you will need to get started",
-    req_step1_title: "Mobile & Registry Info",
-    req_step1_desc: "Active mobile phone for OTP authentication and National Registration Number (Civil ID).",
-    req_step2_title: "Identity Document",
-    req_step2_desc: "Mongolian National ID Card (Primary), Passport, or Residence Permit for foreign nationals.",
-    req_step3_title: "Demographics & Income",
-    req_step3_desc: "Employment details, employer name, occupation status, and monthly income levels.",
-    req_step4_title: "Security PIN & Signature",
-    req_step4_desc: "Establish security codes, card delivery instructions, and draw signature for e-signing.",
-    time_info: "Time to complete: ~5 minutes",
-    start_app: "Start Account Application",
+    req_step1_title: "Loan Calculation & OTP",
+    req_step1_desc: "Configure your desired loan amount, tenure, and verify your mobile number with OTP.",
+    req_step2_title: "Identity & Income Documents",
+    req_step2_desc: "Your National ID Card and PDF/image copy of your salary slip or bank statement.",
+    req_step3_title: "Employment & Profile Details",
+    req_step3_desc: "Details of your employer, work tenure, net monthly salary, and repayment account.",
+    req_step4_title: "Credit Decision & Offer",
+    req_step4_desc: "Review automated credit checks, risk status, and adjust your final pre-approved loan offer.",
+    time_info: "Disbursement time: ~5 minutes",
+    start_app: "Apply for Personal Loan",
     
     // Steppers Nav
-    step1_nav_title: "Registration & OTP",
-    step1_nav_desc: "Verify credentials & NRN",
-    step2_nav_title: "Document Upload",
-    step2_nav_desc: "Choose document & scan",
-    step3_nav_title: "Personal Information",
-    step3_nav_desc: "OCR review & profile",
-    step4_nav_title: "Product Selection",
-    step4_nav_desc: "Choose accounts & preferences",
+    step1_nav_title: "Loan Calculator & OTP",
+    step1_nav_desc: "Configure loan & verify mobile",
+    step2_nav_title: "Document Scan",
+    step2_nav_desc: "Upload ID & income proof",
+    step3_nav_title: "Employment Profile",
+    step3_nav_desc: "Verify profile & income details",
+    step4_nav_title: "Credit Check & Offer",
+    step4_nav_desc: "Risk evaluation & credit limit",
     step5_nav_title: "Biometric Liveness",
-    step5_nav_desc: "Face match & checks",
+    step5_nav_desc: "Secure face matching check",
     step6_nav_title: "Review & e-Sign",
-    step6_nav_desc: "Sign agreements & submit",
+    step6_nav_desc: "Sign Key Facts & submit",
     
     // Sidebar scorecard
     risk_unit_title: "AI Risk Scoring Unit",
@@ -99,45 +92,109 @@ const translations = {
     metric_strength_lbl: "Biometric Cleared Strength",
     
     // Form headers & controls
-    retail_onboarding_lbl: "Retail Digital Onboarding",
+    retail_onboarding_lbl: "Digital Retail Loan Engine",
     ai_standby: "AI Verification: Standby",
     btn_back: "Back",
     btn_save: "Save & Continue Later",
     btn_continue: "Continue",
     
     // Step 1 Form
-    ill_step1_title: "Mobile Verification",
-    ill_step1_desc: "Confirm identity credentials and link your personal mobile number to activate digital banking nodes securely.",
-    form_step1_title: "Mobile Registration",
-    form_step1_desc: "Provide your mobile number and National Registry Number to establish eligibility.",
-    mobile_lbl: "Mobile Number",
+    ill_step1_title: "Loan Calculator",
+    ill_step1_desc: "Adjust the loan slider controls to calculate your estimated monthly payments, interest rate, and fees dynamically.",
+    form_step1_title: "Configure Loan Request",
+    form_step1_desc: "Set your desired loan amount and tenure, and verify your mobile number.",
+    loan_amt_slider_lbl: "Desired Loan Amount",
+    loan_tenure_slider_lbl: "Repayment Tenure Choice",
+    emi_calc_header: "Estimated Repayment Details",
+    interest_rate_lbl: "Interest Rate (Standard)",
+    est_emi_lbl: "Monthly Payment (EMI)",
+    flat_fee_lbl: "One-time Processing Fee",
+    mobile_lbl: "Salary Mobile Number",
     send_otp: "Send OTP",
     otp_lbl: "OTP Verification Code",
     otp_timer_lbl: "Resend code in 60s",
     resend_otp: "Resend Code",
-    nrn_lbl: "National Registry Number (Civil ID)",
+    nrn_lbl: "National Registration Number (Civil ID)",
     nrn_hint: "Format: 2 Cyrillic characters followed by 8 digits (e.g., АА12345678)",
     
     // Step 2 Form
-    ill_step2_title: "OCR Scanning",
-    ill_step2_desc: "Our OCR algorithm automatically reads and parses Mongolian Cyrillic characters to pre-fill identity entries.",
-    form_step2_title: "Document Verification",
-    form_step2_desc: "Upload valid document credentials for automated OCR metadata extraction.",
-    doc_type_lbl: "Document Type",
-    national_id_lbl: "National ID",
+    ill_step2_title: "Upload Documents",
+    ill_step2_desc: "Our OCR engine will parse your ID card automatically. Upload income statements to compute your automated credit limits.",
+    form_step2_title: "Identity & Income Verification",
+    form_step2_desc: "Please upload your identity card and proof of income for extraction check.",
+    doc_type_lbl: "Select ID Document",
+    national_id_lbl: "National ID Card",
     passport_lbl: "Passport",
-    permit_lbl: "Permit",
-    upload_drag_lbl: "Upload front & back files",
-    upload_hint_lbl: "Drag & drop PNG/PDF up to 10MB",
+    permit_lbl: "Residence Permit",
+    upload_drag_lbl: "Upload ID (Front & Back)",
+    upload_hint_lbl: "Drag and drop PNG/JPG up to 10MB",
+    upload_income_lbl: "Upload Income / Bank Statement",
+    upload_income_hint: "Upload your latest salary slip or bank statement PDF/JPG",
     ai_chk_ocr: "OCR Extraction Check",
     ocr_text: "OCR Identity Data Extraction",
     pending: "Pending",
     
     // Step 3 Form
-    ill_step3_title: "Biometrics & AML",
-    ill_step3_desc: "Live facial detection compares selfie biometrics with document photo, running cross-checks against duplicate databases.",
-    form_step3_title: "Selfie Liveness Capture",
-    form_step3_desc: "Provide biometric facial confirmation to run fraud and AML screenings.",
+    ill_step3_title: "Employment Details",
+    ill_step3_desc: "Verify your personal details auto-populated by the OCR system, and fill out your current job profile.",
+    form_step3_title: "Employment & Profile Registry",
+    form_step3_desc: "Provide your demographic details and salary payment settings.",
+    banner_autofill_title: "OCR Data Extracted",
+    banner_autofill_desc: "Please review the auto-populated details below. Highlighted fields are verified.",
+    fullname_lbl: "Full Name (Latin)",
+    dob_lbl: "Date of Birth",
+    gender_lbl: "Gender",
+    gender_male: "Male",
+    gender_female: "Female",
+    gender_other: "Other",
+    nationality_lbl: "Nationality",
+    address_lbl: "Registered Residential Address",
+    locate: "Locate",
+    email_lbl: "Email Address",
+    phone_lbl: "Verified Mobile Number",
+    employment_lbl: "Employment Type",
+    emp_employed: "Employed (Full-time)",
+    emp_self: "Self-Employed / Freelancer",
+    emp_unemp: "Unemployed",
+    emp_student: "Student",
+    emp_retired: "Retired",
+    employer_lbl: "Employer Name",
+    occupation_lbl: "Job Role / Occupation",
+    income_lbl: "Net Monthly Salary (MNT)",
+    salary_acct_lbl: "Salary Repayment Account",
+    pref_lang_lbl: "Preferred Hub Language",
+    lang_mn: "Mongolian",
+    lang_en: "English",
+    pref_branch_lbl: "Repayment Branch Hub",
+    branch_hq: "Sukhbaatar Square HQ",
+    branch_west: "West Crossroad Branch",
+    branch_erd: "Orkhon Erdenet Branch",
+    
+    // Step 4 Form
+    form_step4_title: "Credit Scoring & Eligibility",
+    form_step4_desc: "Our risk checks evaluate your profile against TDB lending regulations.",
+    credit_score_title: "TDB Credit Rating Check",
+    excellent_rating: "Excellent Credit Bureau Score",
+    foir_check_title: "Debt-to-Income Assessment",
+    foir_desc: "Fixed Obligation to Income Ratio (Max 50%)",
+    net_salary_lbl: "Net Salary:",
+    existing_debts_lbl: "Existing Debts / EMIs:",
+    new_emi_lbl: "New Loan EMI:",
+    foir_cap_lbl: "Calculated FOIR Ratio:",
+    pass_cap_msg: "Within TDB policy limits (< 50%)",
+    active_obligations_title: "Active Credit Obligations (Bureau)",
+    lender_col: "Lender Name",
+    type_col: "Type",
+    balance_col: "Current Balance",
+    emi_col: "Monthly EMI",
+    preapproved_offer_title: "Pre-Approved Loan Offer",
+    approved_limit_msg: "Based on your credit assessment, you are pre-approved for up to:",
+    adjust_loan_amt: "Adjust your chosen loan limit:",
+    confirm_offer_btn: "Confirm Approved Offer",
+    
+    // Step 5 Form
+    form_step5_title: "Biometric Liveness Verification",
+    form_step5_desc: "Perform instant liveness screening to verify user identity matching.",
     activate_cam: "Activate Camera Feed",
     align_face: "Align face in frame",
     liveness_ok: "Liveness Verified",
@@ -148,163 +205,94 @@ const translations = {
     dup_text: "Database Duplicate Clearance",
     aml_text: "AML Database Watchlist Check",
     
-    // Step 4 Form
-    ill_step4_title: "Demographics Registry",
-    ill_step4_desc: "Review the database metadata parsed by OCR. Fill out contact fields to finalize demographics profile.",
-    form_step4_title: "Personal Information",
-    form_step4_desc: "Verify extracted details and supply demographic and occupation settings.",
-    banner_autofill_title: "Auto-extracted from Documents",
-    banner_autofill_desc: "Double check OCR data. Fields highlighted in gold are extracted.",
-    fullname_lbl: "Full Name (Latin)",
-    dob_lbl: "Date of Birth",
-    gender_lbl: "Gender",
-    gender_male: "Male",
-    gender_female: "Female",
-    gender_other: "Other",
-    nationality_lbl: "Nationality",
-    address_lbl: "Residential Address",
-    locate: "Locate",
-    email_lbl: "Email Address",
-    phone_lbl: "Verified Phone Number",
-    employment_lbl: "Employment Status",
-    emp_employed: "Employed (Full-time)",
-    emp_self: "Self-Employed / Owner",
-    emp_unemp: "Unemployed",
-    emp_student: "Student",
-    emp_retired: "Retired",
-    employer_lbl: "Employer Name",
-    occupation_lbl: "Occupation",
-    income_lbl: "Monthly Income (MNT)",
-    inc_low: "Under 1,500,000 ₮",
-    inc_mid: "1,500,000 ₮ - 3,500,000 ₮",
-    inc_high: "3,500,000 ₮ - 7,000,000 ₮",
-    inc_highest: "Over 7,000,000 ₮",
-    pref_lang_lbl: "Language Preference",
-    lang_mn: "Mongolian",
-    lang_en: "English",
-    pref_branch_lbl: "Home Branch",
-    branch_hq: "Sukhbaatar Square HQ",
-    branch_west: "West Crossroad Branch",
-    branch_erd: "Orkhon Erdenet Branch",
-    
-    // Step 5 Form
-    form_step5_title: "Product Selection",
-    form_step5_desc: "Choose checking/savings packets and link virtual/physical debit cards.",
-    rec_tag: "✦ PREFERRED VALUE COMBO",
-    rec_bundle_title: "Premium Savings Bundle matched",
-    rec_bundle_desc: "12.5% annual rate + physical card + mobile banking.",
-    apply_pack: "Apply Pack",
-    sect_accounts: "1. Everyday Account Products",
-    premium_savings_title: "Premium Savings Account",
-    premium_savings_desc: "Earn yield paid monthly. Zero setup fees.",
-    premium_savings_rate: "12.5% interest rate",
-    salary_acct_title: "Salary Account",
-    salary_acct_desc: "Receive payroll directly, zero commission internal routing.",
-    sect_card_ops: "2. Debit Card & Digital Services",
-    card_format_title: "Card Form Factor",
-    card_format_desc: "Pick physical, virtual, or both formats",
-    toggle_virt: "Virtual",
-    toggle_both: "Both",
-    toggle_none: "None",
-    digital_add_title: "Digital Banking Add-ons",
-    digital_add_desc: "Select free e-services to activate",
-    srv_app: "App",
-    srv_net: "Net",
-    sect_currencies: "3. Currencies & Security preferences",
-    account_curr_lbl: "Primary Account Currency",
-    account_nick_lbl: "Account Description / Name (Optional)",
-    card_deliv_lbl: "Card Delivery Choice",
-    deliv_branch_title: "Collect at Preferred Branch",
-    deliv_branch_desc: "Card is waiting for checkout at HQ square",
-    deliv_home_title: "Courier Home Dispatch",
-    deliv_home_desc: "Ships to residential address details (1-3 days)",
-    pickup_loc_title: "Pickup location:",
-    courier_addr_title: "Courier Address:",
-    card_pin_lbl: "Debit Card Security PIN",
-    set_pin: "Set Virtual PIN",
-    clear: "Clear",
-    confirm: "Confirm",
-    offers_title: "Pre-Qualified Offers",
-    cc_offer_title: "TD Credit Card Eligibility",
-    cc_limit: "Approved limit:",
-    promo_offer_title: "Exclusive Offer",
-    promo_offer_desc: "Based on your credit bureau profiles, you are pre-approved for an optional gold credit card line. Interest rate: 1.4% monthly. Zero setup fees.",
-    
     // Step 6 Form
-    ill_step6_title: "Application Check",
-    ill_step6_desc: "Take a moment to review all summarized parameters before e-signing and executing.",
-    form_step6_title: "Review & Digital Sign",
-    form_step6_desc: "Ensure details are accurate and draw signature to submit registration.",
-    sum_sec1: "1. DEMOGRAPHICS & PROFILE",
-    sum_sec2: "2. SELECTED PRODUCTS",
-    sum_sec3: "3. SETTINGS & DISPATCH",
+    ill_step6_title: "Agreement Execution",
+    ill_step6_desc: "Review your structured loan terms and Key Facts Statement (KFS) before e-signing and submission.",
+    form_step6_title: "Key Facts Statement & e-Sign",
+    form_step6_desc: "Ensure terms are accurate. Draw your signature to execute the loan contract.",
+    sum_sec1: "1. DEMOGRAPHICS & INCOME",
+    sum_sec2: "2. LOAN TERMS SUMMARY",
+    sum_sec3: "3. DISBURSEMENT TARGET",
     edit: "Edit",
-    sum_name: "Name:",
+    sum_name: "Applicant Name:",
     sum_nrn: "NRN / DOB:",
     sum_address: "Address:",
-    sum_contact: "Contact:",
-    sum_prod: "Deposit:",
-    sum_card: "Debit Card:",
-    sum_extra: "Add-ons:",
-    sum_tax: "Tax Country:",
-    sum_pref: "Currency / Hub:",
-    sum_delivery: "Card Handover:",
-    disclosures_title: "Retail Banking Disclosures",
-    disclosures_desc: "By signing, you warrant that all information submitted is correct. You authorize TDB to open accounts and agree to Electronic Signature Acts.",
-    signature_lbl: "Draw Signature",
-    terms_accept_lbl: "I execute this onboarding packet.",
-    sec_status_title: "Compliance Declarations Risk Status",
+    sum_contact: "Contact Details:",
+    sum_prod: "Principal Amount:",
+    sum_card: "Loan Tenure:",
+    sum_extra: "Monthly EMI:",
+    sum_tax: "Employer Details:",
+    sum_pref: "Repayment Account:",
+    sum_delivery: "Selected Hub Branch:",
+    kfs_headline: "Key Facts Statement (KFS) - Retail Personal Loan",
+    kfs_th_amt: "Sanctioned Principal Amount",
+    kfs_th_apr: "Annual Percentage Rate (APR) %",
+    kfs_th_rate: "Floating Interest Rate",
+    kfs_th_tenure: "Total Repayment Tenure",
+    kfs_th_charges: "Upfront Processing Fee (+VAT)",
+    kfs_th_penal: "Penal Overdue Policy",
+    kfs_th_cooling: "Loan Cooling-off Period",
+    kfs_th_grievance: "Grievance Redressal Contact",
+    kfs_flat_fee: "15,000 ₮ flat processing fee",
+    kfs_penal_desc: "0.1% daily penal fee on overdue principal",
+    kfs_cooling_desc: "24 Hours (No foreclosure charges if principal is returned)",
+    kfs_grievance_desc: "TDB Customer Care (grievance@tdbm.mn)",
+    disclosures_title: "Retail Loan Disclosures & Mandates",
+    disclosures_desc: "By e-signing, you declare all inputs are correct. You authorize TDB to pull credit files, register repayment mandates, and debit your salary account.",
+    signature_lbl: "e-Signature Pad",
+    terms_accept_lbl: "I agree to the Key Facts Statement and sign the loan agreement.",
+    sec_status_title: "AML & PEP Security Clearance Status",
     cleared: "CLEARED",
-    fatca_status: "FATCA Status",
-    pep_status: "PEP Screening",
+    fatca_status: "AML Verification",
+    pep_status: "PEP Check",
     passed: "Passed",
     
     // Step 7 Success
-    success_title: "Account Activated Successfully",
-    success_desc: "Onboarding complete. Your retail account details are ready below.",
-    active_badge: "Account Active",
-    p_account: "IBAN / Account Number",
+    success_title: "Loan Approved & Disbursed",
+    success_desc: "Your digital loan application has been successfully processed. Funds are being disbursed to your salary account.",
+    active_badge: "Disbursal Pending",
+    p_account: "Disbursal Account Number",
     p_cif: "Customer CIF ID",
     p_lead: "Lead ID",
-    p_card: "Virtual Card Node",
-    p_card_ready: "Ready",
-    p_notice: "Delivery Notice",
-    next_title: "Next Steps",
-    next_app_title: "Install TDB Mobile",
-    next_app_desc: "Log in with your phone and secure CIF ID code.",
-    btn_kit: "Welcome Kit",
-    btn_fund: "Fund Account"
+    p_card: "Loan Contract Status",
+    p_card_ready: "Approved & Disbursing",
+    p_notice: "Repayment Details",
+    next_title: "Disbursal Process",
+    next_app_title: "Install TDB Mobile App",
+    next_app_desc: "Log in with your CIF ID to monitor your repayment schedule, outstanding balance, and amortization details.",
+    btn_kit: "Download KFS PDF",
+    btn_fund: "View Loan Details"
   },
   MN: {
     support_num: "Харилцах утас: +976 7011 1234",
     retail_suite: "ХУВИЙН ХАРИЛЦАГЧИЙН ЦОГЦОЛБОР",
-    landing_title: "Дижитал Данс Нээх Бүртгэл",
-    landing_subtitle: "Харилцах болон хадгаламжийн дансыг бүрэн дижиталаар нээнэ үү. Шуурхай цахим баталгаажуулалт, автомат баримт бичгийн хяналт, аюулгүй биометрик танилт.",
-    req_title: "Данс нээхэд шаардагдах зүйлс",
-    req_step1_title: "Гар утас & Регистр",
-    req_step1_desc: "Нэг удаагийн OTP код хүлээн авах утасны дугаар болон Иргэний бүртгэлийн дугаар (Регистр).",
-    req_step2_title: "Иргэний Баримт Бичиг",
-    req_step2_desc: "Монгол Улсын Иргэний үнэмлэх (Үндсэн), Гадаад паспорт, эсвэл Монгол улсад оршин суух зөвшөөрлийн хуудас.",
-    req_step3_title: "Нийгмийн байдал & Орлого",
-    req_step3_desc: "Хөдөлмөр эрхлэлтийн байдал, ажил олгогч байгууллагын нэр, албан тушаал, сарын орлогын хэмжээ.",
-    req_step4_title: "ПИН код & Гарын үсэг",
-    req_step4_desc: "Картын нууц код тохируулах, хүргэлтийн хаяг оруулах, гэрээнд цахим гарын үсэг зурах.",
-    time_info: "Дуусах хугацаа: ~5 минут",
-    start_app: "Бүртгэл Эхлүүлэх",
+    landing_title: "Дижитал Зээлийн Бүртгэл",
+    landing_subtitle: "Хувийн зээлийг ХХБ-аас бүрэн цахимаар аваарай. Шуурхай зээлийн үнэлгээ, автомат баримт бичгийн хяналт, цалингийн дансандаа шууд шилжүүлэн авах боломж.",
+    req_title: "Зээл хүсэхэд шаардагдах зүйлс",
+    req_step1_title: "Зээлийн Тооцоолуур & OTP",
+    req_step1_desc: "Хүссэн зээлийн хэмжээ, хугацаагаа тохируулж, утасны дугаараа OTP кодоор баталгаажуулна уу.",
+    req_step2_title: "Баримт Бичиг Илгээх",
+    req_step2_desc: "Иргэний үнэмлэхийн зураг болон сүүлийн саруудын цалингийн эсвэл дансны хуулга файл.",
+    req_step3_title: "Ажлын Газар & Хувийн Мэдээлэл",
+    req_step3_desc: "Ажилладаг байгууллага, ажилласан жил, цэвэр сарын орлого болон зээл төлөх дансны мэдээлэл.",
+    req_step4_title: "Зээлийн Шийдвэр & Зөвшөөрөл",
+    req_step4_desc: "Автомат зээлийн үнэлгээ, өр орлогын харьцааг хянаж, урьдчилан батлагдсан зээлийн лимитээ сонгоно уу.",
+    time_info: "Шилжүүлэх хугацаа: ~5 минут",
+    start_app: "Зээлийн Хүсэлт Эхлүүлэх",
     
     // Steppers Nav
-    step1_nav_title: "Дугаар & OTP код",
-    step1_nav_desc: "Нэвтрэх эрх & Регистр",
-    step2_nav_title: "Бичиг Баримт Илгээх",
-    step2_nav_desc: "Баримтаа сонгож, хуулах",
-    step3_nav_title: "Хувийн Мэдээлэл",
-    step3_nav_desc: "OCR уншуулах & Баталгаажуулах",
-    step4_nav_title: "Бүтээгдэхүүн Сонгох",
-    step4_nav_desc: "Картын төрөл & Нууц код тохируулах",
-    step5_nav_title: "Биометрик царай танилт",
-    step5_nav_desc: "Царайны биометр & AML шалгалт",
-    step6_nav_title: "Хянах & Гарын үсэг",
-    step6_nav_desc: "Гэрээ батлах & Илгээх",
+    step1_nav_title: "Зээл Тооцох & OTP",
+    step1_nav_desc: "Зээл тохируулах & утас баталгаажуулах",
+    step2_nav_title: "Бичиг баримт",
+    step2_nav_desc: "Иргэний үнэмлэх & орлого хуулах",
+    step3_nav_title: "Ажлын Мэдээлэл",
+    step3_nav_desc: "Ажлын газар & сарын цалин хянах",
+    step4_nav_title: "Шийдвэр & Лимит",
+    step4_nav_desc: "Зээлийн үнэлгээ & хязгаар тогтоох",
+    step5_nav_title: "Царай танилт",
+    step5_nav_desc: "Царайны биометр баталгаажуулах",
+    step6_nav_title: "Хянах & Зурах",
+    step6_nav_desc: "Нөхцөл хянаж, гэрээ зурах",
     
     // Sidebar scorecard
     risk_unit_title: "Аюулгүйн Эрсдэлийн Хяналт",
@@ -314,18 +302,24 @@ const translations = {
     metric_strength_lbl: "Биометрик танилтын баталгаа",
     
     // Form headers & controls
-    retail_onboarding_lbl: "Дижитал Данс Нээх Үйлчилгээ",
+    retail_onboarding_lbl: "Дижитал Зээлийн Бүртгэл",
     ai_standby: "Хяналтын AI: Бэлэн",
     btn_back: "Буцах",
     btn_save: "Хадгалаад гарах",
     btn_continue: "Үргэлжлүүлэх",
     
     // Step 1 Form
-    ill_step1_title: "Утас Баталгаажуулах",
-    ill_step1_desc: "Нэг удаагийн нууц кодоор өөрийн дугаарыг бүртгэж, дижитал банкны үйлчилгээгээ идэвхжүүлнэ үү.",
-    form_step1_title: "Дугаар бүртгүүлэх",
-    form_step1_desc: "Гар утасны дугаар болон регистрийн дугаараа оруулна уу.",
-    mobile_lbl: "Гар утасны дугаар",
+    ill_step1_title: "Зээл Тооцоолуур",
+    ill_step1_desc: "Зээлийн хэмжээ болон хугацааны гулсуурыг өөрчилж, сард төлөх хэмжээ, зээлийн хүү болон шимтгэлийг шууд хараарай.",
+    form_step1_title: "Зээлийн Хэмжээ Тохируулах",
+    form_step1_desc: "Хүсэж буй зээлийн дүнг сонгож, бүртгэлтэй утасны дугаараа оруулна уу.",
+    loan_amt_slider_lbl: "Зээлийн хэмжээ",
+    loan_tenure_slider_lbl: "Зээлийн хугацаа",
+    emi_calc_header: "Эргэн Төлөлтийн Тооцоо",
+    interest_rate_lbl: "Зээлийн хүү (Жилийн)",
+    est_emi_lbl: "Сар бүр төлөх төлбөр",
+    flat_fee_lbl: "Нэг удаагийн зээлийн шимтгэл",
+    mobile_lbl: "Цалин авдаг утасны дугаар",
     send_otp: "OTP код илгээх",
     otp_lbl: "Баталгаажуулах OTP код",
     otp_timer_lbl: "Код дахин илгээх: 60с",
@@ -334,42 +328,29 @@ const translations = {
     nrn_hint: "Формат: Кирилл 2 үсэг, араас нь 8 оронтой тоо (Жишээ нь: АА12345678)",
     
     // Step 2 Form
-    ill_step2_title: "Бичиг баримт уншуулах",
-    ill_step2_desc: "Баримт бичгийг байршуулснаар OCR систем таны хувийн мэдээллийг автоматаар таньж бөглөнө.",
-    form_step2_title: "Бичиг Баримтын Баталгаажуулалт",
-    form_step2_desc: "Мэдээллийг автоматаар уншуулахын тулд иргэний баримтыг тод зургаар илгээнэ үү.",
-    doc_type_lbl: "Бичиг Баримтын Төрөл",
+    ill_step2_title: "Баримт байршуулах",
+    ill_step2_desc: "OCR систем иргэний үнэмлэхийг автоматаар уншина. Орлогын баримтыг хуулснаар зээлийн дээд хэмжээг тооцно.",
+    form_step2_title: "Бичиг Баримт & Орлого Баталгаажуулалт",
+    form_step2_desc: "Иргэний үнэмлэх болон сарын орлого батлах дансны хуулгаа оруулна уу.",
+    doc_type_lbl: "Баримтын төрөл сонгох",
     national_id_lbl: "Иргэний үнэмлэх",
     passport_lbl: "Гадаад паспорт",
     permit_lbl: "Оршин суух зөвшөөрөл",
-    upload_drag_lbl: "Урд болон ард талын зураг хуулах",
-    upload_hint_lbl: "PNG, JPG эсвэл PDF (дээд тал нь 10MB)",
+    upload_drag_lbl: "Баримт хуулах (Урд & Ард)",
+    upload_hint_lbl: "PNG, JPG эсвэл PDF файл (Дээд тал нь 10MB)",
+    upload_income_lbl: "Орлого батлах баримт / Дансны хуулга",
+    upload_income_hint: "Цалингийн тодорхойлолт эсвэл дансны хуулга PDF/JPG оруулах",
     ai_chk_ocr: "OCR Уншилтын хяналт",
     ocr_text: "Баримтаас мэдээлэл унших систем",
     pending: "Хүлээгдэж буй",
     
     // Step 3 Form
-    ill_step3_title: "Биометрик & Эрсдэлийн хяналт",
-    ill_step3_desc: "Камераар авсан зургийг иргэний үнэмлэхийн зурагтай харьцуулж, зөрүүг шалгана.",
-    form_step3_title: "Царайны Баталгаажуулалт",
-    form_step3_desc: "Биометрик танилт хийх замаар залилан мэхлэлт болон AML шалгалтыг гүйцэтгэнэ.",
-    activate_cam: "Камер идэвхжүүлэх",
-    align_face: "Царайгаа хүрээн дотор оруулна уу",
-    liveness_ok: "Царай амжилттай танигдлаа",
-    capture: "Зураг авах",
-    retake: "Дахин авах",
-    ai_chk_bio: "Биометрик Шалгалтууд",
-    face_match_text: "Иргэний үнэмлэхийн зурагтай харьцуулалт",
-    dup_text: "Хэрэглэгчийн давхардал шалгах",
-    aml_text: "Олон улсын хориг, AML шалгалт",
-    
-    // Step 4 Form
-    ill_step4_title: "Иргэний мэдээлэл баталгаажуулах",
-    ill_step4_desc: "Иргэний бүртгэлээс авсан мэдээллийг хянана уу. Алдаатай мэдээллийг өөрчлөх боломжтой.",
-    form_step4_title: "Хувийн Мэдээлэл Хянах",
-    form_step4_desc: "Автоматаар бөглөгдсөн мэдээллүүдийг хянаж, нэмэлт мэдээллийг оруулаарай.",
-    banner_autofill_title: "Баримтаас автоматаар таньж бөглөсөн",
-    banner_autofill_desc: "Мэдээллийг шалгана уу. Шар өнгөөр тодорсон талбаруудыг өөрчлөх боломжтой.",
+    ill_step3_title: "Ажлын газар бүртгэх",
+    ill_step3_desc: "OCR системээр уншигдсан мэдээллийг хянаад, одоогийн ажлын газар, албан тушаал, сарын цэвэр цалингаа оруулна уу.",
+    form_step3_title: "Ажил эрхлэлт & Хувийн Мэдээлэл",
+    form_step3_desc: "Ажлын газрын мэдээлэл болон зээл төлөх дансны тохиргоогоо оруулна уу.",
+    banner_autofill_title: "Баримтаас уншигдсан мэдээлэл",
+    banner_autofill_desc: "Мэдээллийг хянаж, үнэн зөв байдлыг баталгаажуулна уу.",
     fullname_lbl: "Овог нэр (Латин галигаар)",
     dob_lbl: "Төрсөн огноо",
     gender_lbl: "Хүйс",
@@ -381,7 +362,7 @@ const translations = {
     locate: "Хаяг олох",
     email_lbl: "Имэйл хаяг",
     phone_lbl: "Баталгаажсан утасны дугаар",
-    employment_lbl: "Хөдөлмөр эрхлэлт",
+    employment_lbl: "Ажил эрхлэлтийн байдал",
     emp_employed: "Ажилтан (Үндсэн)",
     emp_self: "Хувиараа бизнес эрхлэгч",
     emp_unemp: "Ажилгүй",
@@ -389,138 +370,163 @@ const translations = {
     emp_retired: "Тэтгэвэрт гарсан",
     employer_lbl: "Ажил олгогч байгууллага",
     occupation_lbl: "Албан тушаал / Мэргэжил",
-    income_lbl: "Сарын дундаж орлого (MNT)",
-    inc_low: "1,500,000 ₮-өөс доош",
-    inc_mid: "1,500,000 ₮ - 3,500,000 ₮",
-    inc_high: "3,500,000 ₮ - 7,000,000 ₮",
-    inc_highest: "7,000,000 ₮-өөс дээш",
-    pref_lang_lbl: "Харилцах хэл",
+    income_lbl: "Сарын цэвэр цалин (MNT)",
+    salary_acct_lbl: "Зээл төлөх цалингийн данс",
+    pref_lang_lbl: "Харилцах үндсэн хэл",
     lang_mn: "Монгол хэл",
     lang_en: "Англи хэл",
-    pref_branch_lbl: "Сонгох салбар",
+    pref_branch_lbl: "Зээлийн данс нээх салбар",
     branch_hq: "Төв салбар (Сүхбаатарын талбай)",
     branch_west: "Баруун дөрвөн замын салбар",
     branch_erd: "Орхон Эрдэнэт салбар",
     
+    // Step 4 Form
+    form_step4_title: "Зээл олгох үнэлгээ",
+    form_step4_desc: "Таны хувийн мэдээлэл болон зээлийн түүхийг ХХБ-ны эрсдэлийн журмын дагуу шалгаж байна.",
+    credit_score_title: "ХХБ Зээлийн үнэлгээний шалгалт",
+    excellent_rating: "Маш сайн зээлийн түүхтэй",
+    foir_check_title: "Өр, орлогын харьцааны үнэлгээ",
+    foir_desc: "Сарын нийт зээлийн төлбөрийн харьцаа (Макс 50%)",
+    net_salary_lbl: "Цэвэр сарын орлого:",
+    existing_debts_lbl: "Өмнөх зээлийн төлбөр:",
+    new_emi_lbl: "Шинэ зээлийн сарын EMI:",
+    foir_cap_lbl: "Тооцсон Өр Орлогын харьцаа:",
+    pass_cap_msg: "ХХБ эрсдэлийн шаардлага хангасан (< 50%)",
+    active_obligations_title: "Бүртгэлтэй идэвхтэй зээлийн түүх",
+    lender_col: "Зээлдэгч байгууллага",
+    type_col: "Зээлийн төрөл",
+    balance_col: "Үлдэгдэл дүн",
+    emi_col: "Сарын төлбөр",
+    preapproved_offer_title: "Урьдчилан батлагдсан зээл",
+    approved_limit_msg: "Таны мэдээлэлд үндэслэн батлах боломжтой зээлийн дээд хэмжээ:",
+    adjust_loan_amt: "Авах зээлийн дүнгээ тохируулна уу:",
+    confirm_offer_btn: "Батлагдсан зээлийн дүн сонгох",
+    
     // Step 5 Form
-    form_step5_title: "Бүтээгдэхүүн Сонголт",
-    form_step5_desc: "Дансны төрөл болон холбох дебит картын тохиргоонуудаа хийнэ үү.",
-    rec_tag: "✦ САНАЛ БОЛГОХ ШИЛДЭГ БАГЦ",
-    rec_bundle_title: "Хадгаламжийн Урамшуулалт Багц",
-    rec_bundle_desc: "Жилийн 12.5%-ийн хүүтэй хадгаламж + Үнэ төлбөргүй Виза Платинум карт.",
-    apply_pack: "Сонгох",
-    sect_accounts: "1. Төлбөрийн данс сонгох",
-    premium_savings_title: "Хугацаагүй Хадгаламжийн Данс",
-    premium_savings_desc: "Хүүгээ сар бүр тооцуулах хадгаламж. Дансны доод үлдэгдэл нэхэхгүй.",
-    premium_savings_rate: "Жилийн хүү: 12.5%",
-    salary_acct_title: "Цалингийн Данс",
-    salary_acct_desc: "Байгууллагын цалингаа авах данс, дотоодын шилжүүлэг үнэгүй.",
-    sect_card_ops: "2. Дебит карт & Үйлчилгээний тохиргоо",
-    card_format_title: "Дебит картын хэлбэр",
-    card_format_desc: "Виртуал болон биет картын төрлөө сонгоно уу",
-    toggle_virt: "Зөвхөн виртуал",
-    toggle_both: "Биет + Виртуал",
-    toggle_none: "Карт авахгүй",
-    digital_add_title: "Дижитал банкны үйлчилгээнүүд",
-    digital_add_desc: "Идэвхжүүлэх цахим үйлчилгээгээ сонгоно уу",
-    srv_app: "Аппликейшн",
-    srv_net: "Интернет банк",
-    sect_currencies: "3. Дансны Валют & Нууцлал тохируулах",
-    account_curr_lbl: "Дансны үндсэн валют",
-    account_nick_lbl: "Дансны нэр (Нэмэлт тайлбар)",
-    card_deliv_lbl: "Картыг хүлээн авах нөхцөл",
-    deliv_branch_title: "Салбараас очиж авах",
-    deliv_branch_desc: "Таны карт Төв салбар дээр бэлэн байна",
-    deliv_home_title: "Хүргэлтээр авах",
-    deliv_home_desc: "Оршин суугаа хаягаар хүргүүлэх (1-3 өдөр)",
-    pickup_loc_title: "Хүлээн авах салбар:",
-    courier_addr_title: "Хүргэлтийн хаяг:",
-    card_pin_lbl: "Дебит картын хамгаалалтын PIN код",
-    set_pin: "Нууц код тохируулах",
-    clear: "Арилгах",
-    confirm: "Хадгалах",
-    offers_title: "Урьдчилан батлагдсан зээлийн санал",
-    cc_offer_title: "Кредит карт авах боломж",
-    cc_limit: "Батлагдсан лимит:",
-    promo_offer_title: "Урьдчилан батлагдсан зээл",
-    promo_offer_desc: "Таны зээлийн түүхэнд үндэслэн сарын 1.4%-ийн хүүтэй Алтан зээлийн карт авах урьдчилсан зөвшөөрөл олгогдлоо. Үйлчилгээний шимтгэлгүй.",
+    form_step5_title: "Биометрик царай танилт",
+    form_step5_desc: "Камераар авсан зургийг иргэний үнэмлэхийн зурагтай харьцуулж, зөрүүг шалгана.",
+    activate_cam: "Камер идэвхжүүлэх",
+    align_face: "Царайгаа хүрээн дотор оруулна уу",
+    liveness_ok: "Царай амжилттай танигдлаа",
+    capture: "Зураг авах",
+    retake: "Дахин авах",
+    ai_chk_bio: "Биометрик Шалгалтууд",
+    face_match_text: "Иргэний үнэмлэхийн зурагтай харьцуулалт",
+    dup_text: "Хэрэглэгчийн давхардал шалгах",
+    aml_text: "Олон улсын хориг, AML шалгалт",
     
     // Step 6 Form
-    ill_step6_title: "Бүртгэл хянах",
-    ill_step6_desc: "Цахим гарын үсэг зурж, данс нээх бүртгэлийг илгээхээс өмнө бүх мэдээллээ хянана уу.",
-    form_step6_title: "Бүртгэл Хянах & Илгээх",
-    form_step6_desc: "Мэдээллийн үнэн зөв байдлыг баталж, цахим гарын үсгээ зурна уу.",
-    sum_sec1: "1. ИРГЭНИЙ МЭДЭЭЛЭЛ",
-    sum_sec2: "2. СОНГОСОН БҮТЭЭГДЭХҮҮН",
-    sum_sec3: "3. ТӨЛӨВЛӨГӨӨ & ХҮРГЭЛТ",
+    ill_step6_title: "Гэрээ хийх шат",
+    ill_step6_desc: "Гарын үсэг зурж зээлийн хүсэлт илгээхээс өмнө зээлийн нөхцөлийн мэдэгдлийг хянана уу.",
+    form_step6_title: "Зээлийн үндсэн нөхцөл & Гарын үсэг",
+    form_step6_desc: "Мэдээллээ хянаад, цахим гарын үсэг зурж зээлийн гэрээгээ баталгаажуулна уу.",
+    sum_sec1: "1. ИРГЭНИЙ МЭДЭЭЛЭЛ & ОРЛОГО",
+    sum_sec2: "2. ЗЭЭЛИЙН ҮНДСЭН НӨХЦӨЛ",
+    sum_sec3: "3. ШИЛЖҮҮЛЭХ ДАНСНЫ МЭДЭЭЛЭЛ",
     edit: "Засах",
     sum_name: "Овог нэр:",
     sum_nrn: "Регистр / Төрсөн:",
     sum_address: "Хаяг:",
     sum_contact: "Холбоо барих:",
-    sum_prod: "Хадгаламж:",
-    sum_card: "Карт:",
-    sum_extra: "Цахим үйлчилгээ:",
-    sum_tax: "Татвар төлөгч:",
-    sum_pref: "Дансны валют:",
-    sum_delivery: "Картын нөхцөл:",
-    disclosures_title: "Харилцагчийн нөхцөл, мэдэгдэл",
-    disclosures_desc: "Гарын үсэг зурснаар та оруулсан бүх мэдээллээ үнэн зөв болохыг баталж, данс нээх цахим журмыг бүрэн зөвшөөрч байгаа болно.",
-    signature_lbl: "Цахим Гарын үсэг зурах",
-    terms_accept_lbl: "Би данс нээх нөхцөлийг зөвшөөрч байна.",
-    sec_status_title: "Комплаенс эрсдэлийн хяналтын төлөв",
-    cleared: "ЗӨВШӨӨРӨГДСӨН",
-    fatca_status: "FATCA Татвар",
-    pep_status: "PEP Улс төрч эсэх",
+    sum_prod: "Зээлийн үндсэн дүн:",
+    sum_card: "Зээлийн хугацаа:",
+    sum_extra: "Сарын төлбөр (EMI):",
+    sum_tax: "Ажлын газар:",
+    sum_pref: "Зээл авах данс:",
+    sum_delivery: "Холбогдох салбар:",
+    kfs_headline: "Зээлийн бүтээгдэхүүний үндсэн нөхцөлийн хуудас (KFS)",
+    kfs_th_amt: "Олгох зээлийн үндсэн дүн",
+    kfs_th_apr: "Зээлийн жилийн бодит хүү (APR) %",
+    kfs_th_rate: "Зээлийн хүү (Жилийн)",
+    kfs_th_tenure: "Зээл төлөх нийт хугацаа",
+    ill_step6_title: "Гэрээ хийх шат",
+    ill_step6_desc: "Гарын үсэг зурж зээлийн хүсэлт илгээхээс өмнө зээлийн нөхцөлийн мэдэгдлийг хянана уу.",
+    form_step6_title: "Зээлийн үндсэн нөхцөл & Гарын үсэг",
+    form_step6_desc: "Мэдээллээ хянаад, цахим гарын үсэг зурж зээлийн гэрээгээ баталгаажуулна уу.",
+    sum_sec1: "1. ИРГЭНИЙ МЭДЭЭЛЭЛ & ОРЛОГО",
+    sum_sec2: "2. ЗЭЭЛИЙН ҮНДСЭН НӨХЦӨЛ",
+    sum_sec3: "3. ШИЛЖҮҮЛЭХ ДАНСНЫ МЭДЭЭЛЭЛ",
+    edit: "Засах",
+    sum_name: "Овог нэр:",
+    sum_nrn: "Регистр / Төрсөн:",
+    sum_address: "Хаяг:",
+    sum_contact: "Холбоо барих:",
+    sum_prod: "Зээлийн үндсэн дүн:",
+    sum_card: "Зээлийн хугацаа:",
+    sum_extra: "Сарын төлбөр (EMI):",
+    sum_tax: "Ажлын газар:",
+    sum_pref: "Зээл авах данс:",
+    sum_delivery: "Холбогдох салбар:",
+    kfs_headline: "Зээлийн бүтээгдэхүүний үндсэн нөхцөлийн хуудас (KFS)",
+    kfs_th_amt: "Олгох зээлийн үндсэн дүн",
+    kfs_th_apr: "Зээлийн жилийн бодит хүү (APR) %",
+    kfs_th_rate: "Зээлийн хүү (Жилийн)",
+    kfs_th_tenure: "Зээл төлөх нийт хугацаа",
+    kfs_th_charges: "Шимтгэл / Бусад зардал (+НӨАТ)",
+    kfs_th_penal: "Зээл хэтэрсний алданги тооцох журам",
+    kfs_th_cooling: "Гэрээнээс татгалзах хугацаа",
+    kfs_th_grievance: "Гомдол, санал хүлээн авах суваг",
+    kfs_flat_fee: "15,000 MNT зээл олголтын flat шимтгэл",
+    kfs_penal_desc: "Хэтэрсэн хоног тутамд зээлийн дүнгийн 0.1% алданги",
+    kfs_cooling_desc: "24 цаг (Энэ хугацаанд зээлээ буцаавал алданги, шимтгэлгүй)",
+    kfs_grievance_desc: "ХХБ-ны Хэрэглэгчийн Төв (grievance@tdbm.mn)",
+    disclosures_title: "Зээлийн журмын зөвшөөрөл ба тунхаглал",
+    disclosures_desc: "Цахим гарын үсэг зурснаар зээлийн мэдээллийн сангаас мэдээлэл авах, цалингийн орлогоос зээлээ шууд суутгуулах нөхцөлийг зөвшөөрч байгаа болно.",
+    signature_lbl: "Цахим гарын үсэг",
+    terms_accept_lbl: "Би зээлийн гэрээ болон бүтээгдэхүүний нөхцөлийг зөвшөөрч байна.",
+    sec_status_title: "Дотоод хяналт ба аюулгүйн байдлын төлөв",
+    cleared: "ЗӨВШӨӨРӨГДӨН",
+    fatca_status: "AML Шалгалт",
+    pep_status: "PEP Шалгалт",
     passed: "Тэнцсэн",
     
     // Step 7 Success
-    success_title: "Данс Амжилттай Идэвхжлээ",
-    success_desc: "Баяр хүргэе! Таны дансыг автоматаар (STP) нээлээ.",
-    active_badge: "Данс идэвхтэй",
-    p_account: "Дансны дугаар (Дансны IBAN дугаар)",
+    success_title: "Зээл Батлагдаж Олгогдлоо",
+    success_desc: "Таны цахим зээлийн хүсэлт амжилттай шийдэгдлээ. Зээлийн мөнгийг таны цалингийн данс руу шилжүүлж байна.",
+    active_badge: "Шилжүүлэг хийгдэж байна",
+    p_account: "Зээл олгох дансны дугаар",
     p_cif: "Харилцагчийн CIF код",
     p_lead: "Лид дугаар",
-    p_card: "Картын төлөв",
-    p_card_ready: "Бэлэн",
-    p_notice: "Мэдэгдэл",
-    next_title: "Дараагийн алхам",
+    p_card: "Зээлийн гэрээний төлөв",
+    p_card_ready: "Батлагдсан / Дансанд орсон",
+    p_notice: "Эргэн төлөх нөхцөл",
+    next_title: "Зээлийн эргэн төлөлт хянах",
     next_app_title: "TDB Mongolia аппликейшн татах",
-    next_app_desc: "Бүртгэлтэй утасны дугаар болон CIF кодоор нэвтэрнэ үү.",
-    btn_kit: "Бүртгэлийн хуудас татах",
-    btn_fund: "Данс цэнэглэх"
+    next_app_desc: "Бүртгэлтэй CIF кодоор нэвтэрч зээлийн эргэн төлөлтийн хуваарь, үлдэгдэл тооцоо болон дахин зээл авах мэдээллээ хянаарай.",
+    btn_kit: "Зээлийн KFS файл татах",
+    btn_fund: "Зээлийн дэлгэрэнгүй харах"
   }
 };
 
 // Step Header Metadata
 const stepMeta = {
   1: {
-    EN: { title: "Registration & OTP", desc: "Verify credentials and enter registry details to start onboarding." },
-    MN: { title: "Бүртгүүлэх & OTP баталгаажуулалт", desc: "Утасны дугаараа бүртгэж, регистрийн мэдээллээ оруулна уу." }
+    EN: { title: "Loan Calculator & OTP", desc: "Select your desired loan parameters and verify your salary mobile number." },
+    MN: { title: "Зээл тооцох & OTP баталгаажуулалт", desc: "Авах зээлийн дүн болон хугацаагаа сонгон, утасны дугаараа баталгаажуулна уу." }
   },
   2: {
-    EN: { title: "Document Upload", desc: "Upload identification documents for automated OCR extraction checks." },
-    MN: { title: "Бичиг баримт байршуулах", desc: "OCR системээр уншуулах бичиг баримтын зургаа оруулаарай." }
+    EN: { title: "Document Upload", desc: "Upload your National ID card and salary income statements for OCR verification check." },
+    MN: { title: "Бичиг баримт байршуулах", desc: "Иргэний үнэмлэх болон орлогын тодорхойлолт дансны хуулга файлаа оруулаарай." }
   },
   3: {
-    EN: { title: "Personal Information", desc: "Confirm demographic profiles auto-populated from documents OCR." },
-    MN: { title: "Хувийн мэдээлэл хянах", desc: "Баримт бичгээс автоматаар уншигдсан иргэний мэдээллээ хянана уу." }
+    EN: { title: "Employment Profile", desc: "Verify profile info extracted by OCR and provide employer registry details." },
+    MN: { title: "Ажлын газар & Хувийн мэдээлэл хянах", desc: "Баримтаас уншигдсан мэдээллээ хянаж, ажлын газрын мэдээллээ бөглөнө үү." }
   },
   4: {
-    EN: { title: "Product Selection", desc: "Choose day-to-day accounts, card options, currencies, and card delivery pick-ups." },
-    MN: { title: "Данс & Картын Сонголт", desc: "Хэрэглээний дансны валют, картын төрөл, хамгаалалтын ПИН код болон салбараа сонгоно." }
+    EN: { title: "Decisioning & Limit", desc: "Review credit scoring checks, debt metrics, and select your approved limit." },
+    MN: { title: "Зээлийн шийдвэр & Зээлийн лимит", desc: "Зээлийн үнэлгээ, сарын өр орлогын харьцааг хянаж, батлагдсан зээлийн дүнгээ тохируулна." }
   },
   5: {
-    EN: { title: "Biometric Liveness", desc: "Perform instant liveness screening to verify user matching." },
-    MN: { title: "Биометрик царай баталгаажуулалт", desc: "Царайны хөдөлгөөнөөр өөрийгөө баталгаажуулж, биометр танилт хийнэ." }
+    EN: { title: "Identity Liveness", desc: "Perform biometric face checks to confirm your identity matches the civil registry." },
+    MN: { title: "Биометрик царай баталгаажуулалт", desc: "Биометрик царайны танилтаар өөрийн зургаа үнэмлэхийн зурагтай тулгаж баталгаажуулна." }
   },
   6: {
-    EN: { title: "Review & e-Sign", desc: "Confirm summary packet details and draw digital signature to execute." },
-    MN: { title: "Бүртгэл хянах & Цахим гарын үсэг", desc: "Бүх оруулсан мэдээллээ хянаж, гарын үсэг зурж дуусгана уу." }
+    EN: { title: "Review & e-Sign", desc: "Review the Key Facts Statement (KFS) loan schedule and e-sign the contract." },
+    MN: { title: "Гэрээ хянах & Цахим гарын үсэг", desc: "Зээлийн бүтээгдэхүүний үндсэн нөхцөл KFS-ийг хянаж, гарын үсэг зурж баталгаажуулна." }
   },
   7: {
-    EN: { title: "Account Created Successfully!", desc: "Retail banking setup is online. Funds can be loaded digitally." },
-    MN: { title: "Данс Амжилттай Нээгдлээ!", desc: "Танд баяр хүргэе. Цахим данс бэлэн болсон тул шууд ашиглах боломжтой." }
+    EN: { title: "Loan Disbursed Successfully!", desc: "Retail banking setup is online. Funds are being disbursed to your account." },
+    MN: { title: "Зээл амжилттай олгогдлоо!", desc: "Танд баяр хүргэе. Батлагдсан зээлийн мөнгө таны данс руу шилжиж байна." }
   }
 };
 
@@ -734,6 +740,80 @@ function translateUI(lang) {
   }
 }
 
+function calculateEMI(amount, tenure, ratePercent = 18.5) {
+  const P = amount;
+  const r = (ratePercent / 12) / 100;
+  const n = tenure;
+  
+  if (r === 0) return Math.round(P / n);
+  
+  const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+  return Math.round(emi);
+}
+
+function updateLoanCalculator() {
+  const amountSlider = document.getElementById('loan-amount-slider');
+  const tenureSlider = document.getElementById('loan-tenure-slider');
+  
+  if (!amountSlider || !tenureSlider) return;
+  
+  const amount = parseInt(amountSlider.value);
+  const tenure = parseInt(tenureSlider.value);
+  
+  appState.data.loanAmount = amount;
+  appState.data.loanTenure = tenure;
+  
+  const emi = calculateEMI(amount, tenure);
+  appState.data.calculatedEmi = emi;
+  
+  const amountDisplay = document.getElementById('loan-amount-display');
+  const tenureDisplay = document.getElementById('loan-tenure-display');
+  const emiDisplay = document.getElementById('emi-amount-val');
+  
+  if (amountDisplay) amountDisplay.innerText = amount.toLocaleString() + " MNT";
+  if (tenureDisplay) tenureDisplay.innerText = tenure + " " + (appState.currentLang === 'MN' ? "Сар" : "Months");
+  if (emiDisplay) emiDisplay.innerText = emi.toLocaleString() + " MNT";
+  
+  // Update Step 4 sliders max limits and current value based on salary
+  const finalAmountSlider = document.getElementById('final-loan-amount-slider');
+  if (finalAmountSlider) {
+    const income = appState.data.monthlyIncome || 2500000;
+    const maxOffer = Math.min(15000000, Math.max(5000000, Math.round(income * 4.8 / 500000) * 500000));
+    finalAmountSlider.max = maxOffer;
+    const maxLabel = document.getElementById('final-slider-max-lbl');
+    if (maxLabel) maxLabel.innerText = maxOffer.toLocaleString() + " MNT";
+    const maxDisplay = document.getElementById('approved-max-display');
+    if (maxDisplay) maxDisplay.innerText = maxOffer.toLocaleString() + " MNT";
+    
+    if (parseInt(finalAmountSlider.value) > maxOffer) {
+      finalAmountSlider.value = maxOffer;
+    }
+  }
+}
+
+function updateFinalLoanCalculator() {
+  const amountSlider = document.getElementById('final-loan-amount-slider');
+  const tenureSlider = document.getElementById('final-loan-tenure-slider');
+  
+  if (!amountSlider || !tenureSlider) return;
+  
+  const amount = parseInt(amountSlider.value);
+  const tenure = parseInt(tenureSlider.value);
+  
+  appState.data.selectedAmount = amount;
+  appState.data.selectedTenure = tenure;
+  
+  const emi = calculateEMI(amount, tenure);
+  
+  const amountDisplay = document.getElementById('final-loan-amount-display');
+  const tenureDisplay = document.getElementById('final-loan-tenure-display');
+  const emiDisplay = document.getElementById('final-emi-amount-val');
+  
+  if (amountDisplay) amountDisplay.innerText = amount.toLocaleString() + " MNT";
+  if (tenureDisplay) tenureDisplay.innerText = tenure + " " + (appState.currentLang === 'MN' ? "Сар" : "Months");
+  if (emiDisplay) emiDisplay.innerText = emi.toLocaleString() + " MNT";
+}
+
 // Global Event Handlers
 function bindGlobalEvents() {
   // Lang switch hooks
@@ -845,13 +925,16 @@ function bindGlobalEvents() {
     selectDeliveryMethod('branch');
   });
   
-  // Direct summary review edits links
-  document.querySelectorAll('.btn-link-edit').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const step = parseInt(btn.getAttribute('data-target-step'));
-      setupStepUI(step);
-    });
-  });
+  // Step 1 & Step 4 Loan slider listeners
+  const amtSlider = document.getElementById('loan-amount-slider');
+  const tenSlider = document.getElementById('loan-tenure-slider');
+  if (amtSlider) amtSlider.addEventListener('input', updateLoanCalculator);
+  if (tenSlider) tenSlider.addEventListener('input', updateLoanCalculator);
+  
+  const finalAmtSlider = document.getElementById('final-loan-amount-slider');
+  const finalTenSlider = document.getElementById('final-loan-tenure-slider');
+  if (finalAmtSlider) finalAmtSlider.addEventListener('input', updateFinalLoanCalculator);
+  if (finalTenSlider) finalTenSlider.addEventListener('input', updateFinalLoanCalculator);
 }
 
 // Navigation Controls
@@ -1062,16 +1145,7 @@ async function triggerBackgroundCrmLead() {
     }
     
     // Selected product mapping
-    let productSelected = "Classic Credit Card";
-    if (d.selectedAccount === "savings_acct") {
-      productSelected = "Premium Savings Account";
-    } else if (d.selectedAccount === "salary_acct") {
-      productSelected = "Salary Account";
-    }
-    const ccChecked = document.getElementById('offer-credit-card')?.checked;
-    if (ccChecked) {
-      productSelected = "TD Gold Credit";
-    }
+    let productSelected = "Retail Personal Loan";
     
     const leadBody = [
       {
@@ -1152,9 +1226,14 @@ function validateCurrentStep() {
     const gender = document.getElementById('p-gender').value;
     const addr = document.getElementById('p-address').value.trim();
     const email = document.getElementById('p-email').value.trim();
+    const employer = document.getElementById('p-employer').value.trim();
+    const occupation = document.getElementById('p-occupation').value.trim();
+    const salary = document.getElementById('p-income').value;
+    const tenure = document.getElementById('p-work-tenure').value;
+    const salaryAcct = document.getElementById('p-salary-acct').value.trim();
     
-    if (!name || !dob || !gender || !addr || !email) {
-      showNotification(isMN ? "Хувийн мэдээллээ бүрэн хянаж дуусгана уу. Хаяг, имэйл талбар хоосон байж болохгүй." : "Please verify all demographic information. Address and email cannot be empty.", 'warning');
+    if (!name || !dob || !gender || !addr || !email || !employer || !occupation || !salary || !tenure || !salaryAcct) {
+      showNotification(isMN ? "Ажлын газар, хаяг, имэйл болон бусад мэдээллээ бүрэн бөглөнө үү." : "Please fill out all employment and demographic fields. Repayment account and net income cannot be empty.", 'warning');
       return false;
     }
     
@@ -1168,17 +1247,26 @@ function validateCurrentStep() {
     appState.data.gender = gender;
     appState.data.address = addr;
     appState.data.email = email;
-    appState.data.employerName = document.getElementById('p-employer').value.trim();
-    appState.data.occupation = document.getElementById('p-occupation').value.trim();
-    appState.data.monthlyIncome = document.getElementById('p-income').value;
+    appState.data.employerName = employer;
+    appState.data.occupation = occupation;
+    appState.data.monthlyIncome = parseFloat(salary) || 2500000;
+    appState.data.workTenure = tenure;
+    appState.data.salaryAccount = salaryAcct;
+    appState.data.prefLanguage = document.getElementById('p-lang').value;
+    appState.data.prefBranch = document.getElementById('p-branch').value;
   }
   
   if (step === 4) {
-    const currRadio = document.querySelector('input[name="currency"]:checked');
-    if (currRadio) appState.data.accountCurrency = currRadio.value;
-    
-    const nick = document.getElementById('pref-nickname').value.trim();
-    appState.data.accountNickname = nick;
+    const finalAmountSlider = document.getElementById('final-loan-amount-slider');
+    const finalTenureSlider = document.getElementById('final-loan-tenure-slider');
+    if (finalAmountSlider && finalTenureSlider) {
+      appState.data.selectedAmount = parseInt(finalAmountSlider.value);
+      appState.data.selectedTenure = parseInt(finalTenureSlider.value);
+      
+      const emi = calculateEMI(appState.data.selectedAmount, appState.data.selectedTenure);
+      const salary = parseFloat(appState.data.monthlyIncome) || 2500000;
+      appState.data.foirRatio = Math.round((emi / salary) * 100);
+    }
   }
   
   if (step === 5) {
@@ -1194,7 +1282,7 @@ function validateCurrentStep() {
     const terms = document.getElementById('terms-accept').checked;
     
     if (!terms) {
-      showNotification(isMN ? "Данс нээх нөхцөлийг зөвшөөрч, чагтална уу." : "Please accept all terms and conditions to submit your digital application.", 'warning');
+      showNotification(isMN ? "Зээлийн бүтээгдэхүүний үндсэн нөхцөл болон гэрээг зөвшөөрч, чагтална уу." : "Please accept the Key Facts Statement and loan agreement terms to submit.", 'warning');
       return false;
     }
     
@@ -1356,30 +1444,88 @@ function validateNrn(val) {
 function setupDocumentUpload() {
   const uploadArea = document.getElementById('doc-upload-area');
   const uploader = document.getElementById('file-uploader');
-  if (!uploader || !uploadArea) return;
+  if (uploader && uploadArea) {
+    uploader.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = 'var(--td-green)';
+    });
+    
+    uploader.addEventListener('dragleave', () => {
+      uploadArea.style.borderColor = 'var(--border-color)';
+    });
+    
+    uploader.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = 'var(--border-color)';
+      if (e.dataTransfer.files.length > 0) {
+        handleUploadedFiles(e.dataTransfer.files);
+      }
+    });
+    
+    uploader.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleUploadedFiles(e.target.files);
+      }
+    });
+  }
+
+  // Income Statement uploader
+  const incomeArea = document.getElementById('income-upload-area');
+  const incomeUploader = document.getElementById('income-uploader');
+  if (incomeUploader && incomeArea) {
+    incomeUploader.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      incomeArea.style.borderColor = 'var(--td-green)';
+    });
+    
+    incomeUploader.addEventListener('dragleave', () => {
+      incomeArea.style.borderColor = 'var(--border-color)';
+    });
+    
+    incomeUploader.addEventListener('drop', (e) => {
+      e.preventDefault();
+      incomeArea.style.borderColor = 'var(--border-color)';
+      if (e.dataTransfer.files.length > 0) {
+        handleIncomeFiles(e.dataTransfer.files);
+      }
+    });
+    
+    incomeUploader.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleIncomeFiles(e.target.files);
+      }
+    });
+  }
+}
+
+function handleIncomeFiles(files) {
+  const list = document.getElementById('income-files-list');
+  if (!list) return;
+  list.classList.remove('hidden');
   
-  uploader.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.style.borderColor = 'var(--td-green)';
-  });
-  
-  uploader.addEventListener('dragleave', () => {
-    uploadArea.style.borderColor = 'var(--border-color)';
-  });
-  
-  uploader.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.style.borderColor = 'var(--border-color)';
-    if (e.dataTransfer.files.length > 0) {
-      handleUploadedFiles(e.dataTransfer.files);
-    }
-  });
-  
-  uploader.addEventListener('change', (e) => {
-    if (e.target.files.length > 0) {
-      handleUploadedFiles(e.target.files);
-    }
-  });
+  for (let file of files) {
+    const row = document.createElement('div');
+    row.className = 'uploaded-file-row';
+    row.innerHTML = `
+      <div class="file-row-details">
+        <span class="file-icon">📊</span>
+        <div class="file-name-size">
+          <span class="file-name">${file.name}</span>
+          <span class="file-size">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
+        </div>
+      </div>
+      <button class="file-remove-btn">&times;</button>
+    `;
+    list.appendChild(row);
+    
+    row.querySelector('.file-remove-btn').addEventListener('click', () => {
+      row.remove();
+      if (list.children.length === 0) {
+        list.classList.add('hidden');
+      }
+    });
+  }
+  saveStateToLocalStorage();
 }
 
 function handleUploadedFiles(files) {
@@ -1860,50 +2006,40 @@ function prepareReviewSummary() {
   const d = appState.data;
   const isMN = appState.currentLang === 'MN';
   
+  const branchSelect = document.getElementById('p-branch');
+  const branchName = branchSelect ? branchSelect.options[branchSelect.selectedIndex].text : "Sukhbaatar Square HQ";
+  
+  // Demographics
   document.getElementById('sum-name').innerText = d.fullName || (isMN ? "Хоосон" : "Not Entered");
   document.getElementById('sum-nrn').innerText = `${maskNrn(d.nrnNumber) || "N/A"} / ${d.dob || "N/A"}`;
   document.getElementById('sum-contact').innerText = `+976 ${d.mobileNumber} | ${d.email}`;
   document.getElementById('sum-address').innerText = d.address || (isMN ? "Хаяг бүртгүүлээгүй" : "Not Configured");
+  document.getElementById('sum-tax').innerText = d.employerName || (isMN ? "Хоосон" : "Not Entered");
+  document.getElementById('sum-salary').innerText = d.monthlyIncome ? d.monthlyIncome.toLocaleString() + " MNT" : "--";
   
-  let prodLabel = isMN ? "Хянах данс" : "Checking Account";
-  if (d.selectedAccount === 'savings_acct') prodLabel = isMN ? "Хадгаламжийн данс (Жилийн 12.5% хүү)" : "Premium Savings (12.5% p.a.)";
-  if (d.selectedAccount === 'salary_acct') prodLabel = isMN ? "Цалингийн данс" : "Salary Direct Account";
-  document.getElementById('sum-product').innerText = prodLabel;
+  // Loan terms
+  const emi = calculateEMI(d.selectedAmount, d.selectedTenure);
+  document.getElementById('sum-product').innerText = d.selectedAmount ? d.selectedAmount.toLocaleString() + " MNT" : "--";
+  document.getElementById('sum-card').innerText = d.selectedTenure ? d.selectedTenure + (isMN ? " Сар" : " Months") : "--";
+  document.getElementById('sum-extra').innerText = emi ? emi.toLocaleString() + " MNT" : "--";
   
-  let cardLabel = isMN ? "Карт авахгүй" : "None";
-  if (d.cardFormFactor === 'virtual') cardLabel = isMN ? "Зөвхөн виртуал карт" : "Virtual Card Only";
-  if (d.cardFormFactor === 'both') cardLabel = isMN ? "Биет + Виртуал карт" : "Physical + Virtual Card";
-  document.getElementById('sum-card').innerText = cardLabel;
+  // Servicing
+  document.getElementById('sum-pref').innerText = d.salaryAccount || "--";
+  document.getElementById('sum-delivery').innerText = branchName;
   
-  const extras = [];
-  if (d.digitalServices.mobile) extras.push(isMN ? "Аппликейшн" : "Mobile App");
-  if (d.digitalServices.internet) extras.push(isMN ? "Интернет банк" : "Web Banking");
-  if (document.getElementById('offer-credit-card').checked) extras.push(isMN ? "Алтан зээлийн шугам" : "Gold Credit Line");
-  document.getElementById('sum-extra').innerText = extras.join(', ') || "None";
-  
-  document.getElementById('sum-tax').innerText = d.taxResidency;
-  
-  const branchSelect = document.getElementById('p-branch');
-  const branchName = branchSelect.options[branchSelect.selectedIndex].text;
-  document.getElementById('sum-pref').innerText = `${d.accountCurrency} | ${branchName}`;
-  document.getElementById('sum-delivery').innerText = d.deliveryMethod === 'branch' ? 
-    (isMN ? `Салбараас авах (${branchName})` : `Pickup (${branchName})`) : 
-    (isMN ? "Хүргэлтээр авах" : "Courier Dispatch");
+  // Fill Key Facts Statement (KFS) values
+  const kfsPrincipal = document.getElementById('kfs-val-principal');
+  const kfsTenure = document.getElementById('kfs-val-tenure');
+  if (kfsPrincipal) kfsPrincipal.innerText = d.selectedAmount ? d.selectedAmount.toLocaleString() + " MNT" : "--";
+  if (kfsTenure) kfsTenure.innerText = d.selectedTenure ? d.selectedTenure + (isMN ? " Сар" : " Months") : "--";
 
   // Pre-fill Step 7 labels
   document.getElementById('success-name').innerText = d.fullName;
-  document.getElementById('success-account-num').innerText = generateMockAccountNum(d.accountCurrency);
+  document.getElementById('success-account-num').innerText = d.salaryAccount || "--";
   document.getElementById('success-cif').innerText = `CIF-${Math.floor(1000000 + Math.random() * 9000000)}`;
-  
-  if (d.deliveryMethod === 'branch') {
-    document.getElementById('success-delivery-notice').innerText = isMN ? 
-      `Таны карт ${branchName} салбар дээр бэлэн байна.` : 
-      `Your debit card is ready for collection at ${branchName}.`;
-  } else {
-    document.getElementById('success-delivery-notice').innerText = isMN ? 
-      `Таны картыг харилцах хаяг болох ${d.address} рүү хүргэнэ.` : 
-      `Debit card will be couriered to ${d.address}.`;
-  }
+  document.getElementById('success-delivery-notice').innerText = isMN ? 
+    "Сар бүрийн эргэн төлөлт цалингийн данснаас автоматаар суутгагдана." : 
+    "Monthly installments are configured to auto-debit from your salary repayment account.";
 }
 
 function generateMockAccountNum(currency) {
