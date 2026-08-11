@@ -1020,9 +1020,23 @@ async function createCrmLeadAndProceed() {
     document.head.appendChild(style);
   }
   
+  let apiBase = "https://presales.businessbywire.com/restapigb8";
+  
+  // Use local dev proxy if running on localhost / 127.0.0.1 or file context on desktop
+  const isLocal = window.location.hostname === "localhost" || 
+                  window.location.hostname === "127.0.0.1" || 
+                  (window.location.protocol === "file:" && 
+                   !navigator.userAgent.includes("Android") && 
+                   !navigator.userAgent.includes("iPhone") && 
+                   !navigator.userAgent.includes("iPad"));
+  
+  if (isLocal) {
+    apiBase = "http://localhost:3000";
+  }
+  
   try {
     // 1. Authenticate to get token
-    const authRes = await fetch('https://presales.businessbywire.com/restapigb8/oauth2/token', {
+    const authRes = await fetch(`${apiBase}/oauth2/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1102,7 +1116,7 @@ async function createCrmLeadAndProceed() {
     ];
     
     // 2. Create lead using the token
-    const leadRes = await fetch('https://presales.businessbywire.com/restapigb8/crmWebApi/saveObject', {
+    const leadRes = await fetch(`${apiBase}/crmWebApi/saveObject`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
