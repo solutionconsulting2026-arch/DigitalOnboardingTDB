@@ -18,6 +18,7 @@
   --bg-sidebar: #ffffff;
   --card-bg: #ffffff;
   --text-main: #0f172a;
+  --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
   --text-light: #94a3b8;
@@ -933,6 +934,7 @@ body {
   position: absolute;
   right: 6px;
   padding: 6px 10px;
+  z-index: 5;
 }
 
 /* Validation wrapper icon markers */

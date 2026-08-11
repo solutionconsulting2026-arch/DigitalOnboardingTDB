@@ -55,7 +55,7 @@ let appState = {
 const translations = {
   EN: {
     support_num: "Support: +976 7011 1234",
-    retail_suite: "RETAIL BANKING SUITE",
+    retail_suite: "PERSONAL LENDING SUITE",
     landing_title: "Digital Personal Loan Application",
     landing_subtitle: "Apply for a personal loan completely online with TDB. Fast online verification, automated credit scoring, and instant disbursement to your salary account.",
     req_title: "What you will need to get started",
@@ -265,7 +265,7 @@ const translations = {
   },
   MN: {
     support_num: "Харилцах утас: +976 7011 1234",
-    retail_suite: "ХУВИЙН ХАРИЛЦАГЧИЙН ЦОГЦОЛБОР",
+    retail_suite: "ХУВИЙН ЗЭЭЛИЙН ҮЙЛЧИЛГЭЭ",
     landing_title: "Дижитал Зээлийн Бүртгэл",
     landing_subtitle: "Хувийн зээлийг ХХБ-аас бүрэн цахимаар аваарай. Шуурхай зээлийн үнэлгээ, автомат баримт бичгийн хяналт, цалингийн дансандаа шууд шилжүүлэн авах боломж.",
     req_title: "Зээл хүсэхэд шаардагдах зүйлс",
@@ -918,12 +918,16 @@ function bindGlobalEvents() {
   const deliveryHome = document.getElementById('delivery-home-option');
   const deliveryBranch = document.getElementById('delivery-branch-option');
   
-  deliveryHome.addEventListener('click', () => {
-    selectDeliveryMethod('home');
-  });
-  deliveryBranch.addEventListener('click', () => {
-    selectDeliveryMethod('branch');
-  });
+  if (deliveryHome) {
+    deliveryHome.addEventListener('click', () => {
+      selectDeliveryMethod('home');
+    });
+  }
+  if (deliveryBranch) {
+    deliveryBranch.addEventListener('click', () => {
+      selectDeliveryMethod('branch');
+    });
+  }
   
   // Step 1 & Step 4 Loan slider listeners
   const amtSlider = document.getElementById('loan-amount-slider');
@@ -1014,11 +1018,18 @@ function setupStepUI(step) {
     prevBtn.removeAttribute('disabled');
   }
   
-  // Setup logic specific to Review Step (Step 6)
+  if (step === 1) {
+    updateLoanCalculator();
+  }
+  
+  if (step === 4) {
+    updateFinalLoanCalculator();
+  }
+  
   if (step === 6) {
     prepareReviewSummary();
   }
-  
+
   updateSidebarMetrics();
   saveStateToLocalStorage();
 }
@@ -1078,7 +1089,7 @@ function updateAiVerificationBadge(step) {
 function handleNextStep() {
   if (validateCurrentStep()) {
     if (appState.currentStep === 6) {
-      appState.data.leadId = "20669";
+      appState.data.leadId = "20678";
       setupStepUI(7);
       triggerBackgroundCrmLead();
     } else {
@@ -1903,21 +1914,24 @@ function setupProductSelections() {
     });
   });
   
-  document.getElementById('btn-apply-rec').addEventListener('click', () => {
-    const premiumCard = document.querySelector('.product-card[data-product="savings_acct"]');
-    if (premiumCard) premiumCard.click();
-    
-    const physicalToggle = document.querySelector('.btn-toggle[data-val="both"]');
-    if (physicalToggle) physicalToggle.click();
-    
-    const offerCC = document.getElementById('offer-credit-card');
-    if (offerCC) offerCC.checked = true;
-    
-    const alertMsg = appState.currentLang === 'MN' ? 
-      "Урамшуулалт багц амжилттай идэвхжлээ!" : 
-      "Premium Savings Account and Visa Platinum debit card selections pre-applied!";
-    showNotification(alertMsg, 'success');
-  });
+  const applyRec = document.getElementById('btn-apply-rec');
+  if (applyRec) {
+    applyRec.addEventListener('click', () => {
+      const premiumCard = document.querySelector('.product-card[data-product="savings_acct"]');
+      if (premiumCard) premiumCard.click();
+      
+      const physicalToggle = document.querySelector('.btn-toggle[data-val="both"]');
+      if (physicalToggle) physicalToggle.click();
+      
+      const offerCC = document.getElementById('offer-credit-card');
+      if (offerCC) offerCC.checked = true;
+      
+      const alertMsg = appState.currentLang === 'MN' ? 
+        "Урамшуулалт багц амжилттай идэвхжлээ!" : 
+        "Premium Savings Account and Visa Platinum debit card selections pre-applied!";
+      showNotification(alertMsg, 'success');
+    });
+  }
 }
 
 // Card Delivery pickups
@@ -2034,12 +2048,17 @@ function prepareReviewSummary() {
   if (kfsTenure) kfsTenure.innerText = d.selectedTenure ? d.selectedTenure + (isMN ? " Сар" : " Months") : "--";
 
   // Pre-fill Step 7 labels
-  document.getElementById('success-name').innerText = d.fullName;
-  document.getElementById('success-account-num').innerText = d.salaryAccount || "--";
-  document.getElementById('success-cif').innerText = `CIF-${Math.floor(1000000 + Math.random() * 9000000)}`;
-  document.getElementById('success-delivery-notice').innerText = isMN ? 
-    "Сар бүрийн эргэн төлөлт цалингийн данснаас автоматаар суутгагдана." : 
-    "Monthly installments are configured to auto-debit from your salary repayment account.";
+  const successName = document.getElementById('success-name');
+  if (successName) successName.innerText = d.fullName || "";
+  
+  const successAcc = document.getElementById('success-account-num');
+  if (successAcc) successAcc.innerText = d.salaryAccount || "--";
+  
+  const successAmt = document.getElementById('success-loan-amount');
+  if (successAmt) successAmt.innerText = d.selectedAmount ? d.selectedAmount.toLocaleString() + " MNT" : "--";
+  
+  const successEmi = document.getElementById('success-loan-emi');
+  if (successEmi) successEmi.innerText = emi ? emi.toLocaleString() + " MNT" : "--";
 }
 
 function generateMockAccountNum(currency) {

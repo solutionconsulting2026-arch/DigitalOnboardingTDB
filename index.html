@@ -38,9 +38,9 @@
     </header>
 
     <main class="landing-hero-section">
-      <span class="hero-badge" data-translate="retail_suite">RETAIL BANKING SUITE</span>
-      <h1 class="hero-title" data-translate="landing_title">Digital Retail Account Opening</h1>
-      <p class="hero-subtitle" data-translate="landing_subtitle">Open a premium, fully digital retail checking or savings account for your day-to-day banking. Fast online verification, automated document review, and secure biometrics.</p>
+      <span class="hero-badge" data-translate="retail_suite">PERSONAL LENDING SUITE</span>
+      <h1 class="hero-title" data-translate="landing_title">Digital Personal Loan Application</h1>
+      <p class="hero-subtitle" data-translate="landing_subtitle">Apply for a personal loan completely online with TDB. Fast online verification, automated credit scoring, and instant disbursement to your salary account.</p>
       
       <!-- What you need card -->
       <div class="requirements-card">
@@ -82,10 +82,10 @@
         <div class="req-footer">
           <div class="req-time-info">
             <span class="clock-icon">🕒</span>
-            <span data-translate="time_info">Time to complete: ~5 minutes</span>
+            <span data-translate="time_info">Disbursement time: ~5 minutes</span>
           </div>
           <button type="button" class="btn btn-accent btn-large" id="btn-start-onboarding">
-            <span data-translate="start_app">Start Account Application</span> <span class="arrow-btn">→</span>
+            <span data-translate="start_app">Start Loan Application</span> <span class="arrow-btn">→</span>
           </button>
         </div>
       </div>
@@ -207,10 +207,10 @@
       
       <header class="main-content-header">
         <div class="header-details-top">
-          <span class="onboarding-scope-label" data-translate="retail_onboarding_lbl">Retail Digital Onboarding</span>
+          <span class="onboarding-scope-label" data-translate="retail_onboarding_lbl">Digital Retail Loan Engine</span>
         </div>
-        <h2 id="step-main-title">Open Your Retail Account</h2>
-        <p id="step-main-desc">Open a business/retail account digitally in just a few minutes.</p>
+        <h2 id="step-main-title">Personal Loan Onboarding</h2>
+        <p id="step-main-desc">Configure loan parameters, verify credentials, and sign agreements online.</p>
       </header>
       
       <!-- Split Form Steps Container -->
@@ -246,6 +246,42 @@
                 <div class="form-card-header">
                   <h3 data-translate="form_step1_title">Configure Loan Request</h3>
                   <p data-translate="form_step1_desc">Set your desired loan amount and tenure, and verify your mobile number.</p>
+                </div>
+                
+                
+                <!-- Mobile Number & NRN Registration Section -->
+                <div class="form-group">
+                  <label for="mobile-number"><span data-translate="mobile_lbl">Mobile Number</span> <span class="required">*</span></label>
+                  <div class="input-with-action">
+                    <div class="phone-prefix">+976</div>
+                    <input type="tel" id="mobile-number" class="form-control" placeholder="Mobile Number (e.g. 99123456)">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-send-otp" data-translate="send_otp">Send OTP</button>
+                  </div>
+                </div>
+                
+                <div class="form-group hidden" id="otp-group">
+                  <label><span data-translate="otp_lbl">OTP Verification Code</span> <span class="required">*</span></label>
+                  <div class="otp-input-container">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="0">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="1">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="2">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="3">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="4">
+                    <input type="password" maxlength="1" class="otp-cell" data-index="5">
+                  </div>
+                  <div class="otp-actions">
+                    <span id="otp-timer" data-translate="otp_timer_lbl">Resend code in 60s</span>
+                    <button type="button" class="btn-link hidden" id="btn-resend-otp" data-translate="resend_otp">Resend Code</button>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="nrn-number"><span data-translate="nrn_lbl">National Registry Number (Civil ID)</span> <span class="required">*</span></label>
+                  <div class="input-icon-wrapper">
+                    <input type="text" id="nrn-number" class="form-control uppercase" placeholder="e.g. УУ95120612">
+                    <span class="validation-status-icon" id="nrn-validation-icon"></span>
+                  </div>
+                  <small class="form-hint" data-translate="nrn_hint">Format: 2 Cyrillic characters followed by 8 digits</small>
                 </div>
                 
                 <!-- Loan Calculator Widget -->
@@ -291,40 +327,6 @@
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <div class="form-group">
-                  <label for="mobile-number"><span data-translate="mobile_lbl">Mobile Number</span> <span class="required">*</span></label>
-                  <div class="input-with-action">
-                    <div class="phone-prefix">+976</div>
-                    <input type="tel" id="mobile-number" class="form-control" placeholder="Mobile Number (e.g. 99123456)">
-                    <button type="button" class="btn btn-secondary btn-sm" id="btn-send-otp" data-translate="send_otp">Send OTP</button>
-                  </div>
-                </div>
-                
-                <div class="form-group hidden" id="otp-group">
-                  <label><span data-translate="otp_lbl">OTP Verification Code</span> <span class="required">*</span></label>
-                  <div class="otp-input-container">
-                    <input type="password" maxlength="1" class="otp-cell" data-index="0">
-                    <input type="password" maxlength="1" class="otp-cell" data-index="1">
-                    <input type="password" maxlength="1" class="otp-cell" data-index="2">
-                    <input type="password" maxlength="1" class="otp-cell" data-index="3">
-                    <input type="password" maxlength="1" class="otp-cell" data-index="4">
-                    <input type="password" maxlength="1" class="otp-cell" data-index="5">
-                  </div>
-                  <div class="otp-actions">
-                    <span id="otp-timer" data-translate="otp_timer_lbl">Resend code in 60s</span>
-                    <button type="button" class="btn-link hidden" id="btn-resend-otp" data-translate="resend_otp">Resend Code</button>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label for="nrn-number"><span data-translate="nrn_lbl">National Registry Number (Civil ID)</span> <span class="required">*</span></label>
-                  <div class="input-icon-wrapper">
-                    <input type="text" id="nrn-number" class="form-control uppercase" placeholder="e.g. УУ95120612">
-                    <span class="validation-status-icon" id="nrn-validation-icon"></span>
-                  </div>
-                  <small class="form-hint" data-translate="nrn_hint">Format: 2 Cyrillic characters followed by 8 digits</small>
                 </div>
               </div>
             </div>
@@ -756,38 +758,7 @@
                   </div>
                 </div>
                 
-                <h3 class="panel-section-title" data-translate="sect_branch_ops">Preferred Branch for Loan Servicing</h3>
-                <div class="form-group">
-                  <label><span data-translate="card_deliv_lbl">Card Delivery Choice</span> <span class="required">*</span></label>
-                  <div class="delivery-selectors">
-                    <label class="delivery-card active" id="delivery-branch-option">
-                      <input type="radio" name="delivery" value="branch" checked>
-                      <div class="delivery-icon">🏛️</div>
-                      <div class="delivery-info">
-                        <strong data-translate="deliv_branch_title">Collect at Preferred Branch</strong>
-                        <small data-translate="deliv_branch_desc">Card is waiting for checkout at HQ square</small>
-                      </div>
-                    </label>
-                    <label class="delivery-card" id="delivery-home-option">
-                      <input type="radio" name="delivery" value="home">
-                      <div class="delivery-icon">🏠</div>
-                      <div class="delivery-info">
-                        <strong data-translate="deliv_home_title">Courier Home Dispatch</strong>
-                        <small data-translate="deliv_home_desc">Ships to residential address details (1-3 days)</small>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-                
-                <div class="delivery-details-box" id="delivery-branch-details">
-                  <strong data-translate="pickup_loc_title">Pickup location:</strong>
-                  <p id="selected-branch-display">Sukhbaatar Square HQ (Ulaanbaatar)</p>
-                </div>
-                
-                <div class="delivery-details-box hidden" id="delivery-home-details">
-                  <strong data-translate="courier_addr_title">Courier Address:</strong>
-                  <p id="selected-address-display">--</p>
-                </div>
+                <!-- Servicing instructions -->
                 
                 <!-- PIN setup removed per security guidelines -->
               </div>
@@ -911,13 +882,7 @@
                   <p data-translate="disclosures_desc">By signing, you warrant that all information submitted is correct. You authorize TDB to pull credit checks and automatically deduct loan installments from salary.</p>
                 </div>
                 
-                <div class="signature-canvas-container mt-15" style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: white;">
-                  <div style="background: var(--bg-secondary); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 11px; font-weight: 700; color: var(--text-main);" data-translate="signature_lbl">Draw your digital signature</span>
-                    <button type="button" class="btn btn-secondary btn-xs" id="btn-clear-sig">Clear</button>
-                  </div>
-                  <canvas id="signature-pad" style="width: 100%; height: 120px; display: block; cursor: crosshair; background: white;"></canvas>
-                </div>
+
                 
                 <div class="otp-confirmation-block mt-15">
                   <label class="custom-checkbox align-start">
@@ -980,11 +945,11 @@
                 </div>
               </div>
               <div class="profile-details-grid">
-                <div class="profile-item"><span class="p-lbl" data-translate="p_account">IBAN / Account Number</span> <strong class="p-val" id="success-account-num">--</strong></div>
-                <div class="profile-item"><span class="p-lbl" data-translate="p_cif">Customer CIF ID</span> <strong class="p-val" id="success-cif">--</strong></div>
-                <div class="profile-item"><span class="p-lbl" data-translate="p_lead">Lead ID</span> <strong class="p-val" id="success-lead-id">--</strong></div>
-                <div class="profile-item"><span class="p-lbl" data-translate="p_card">Virtual Card Node</span> <strong class="p-val text-green" data-translate="p_card_ready">Ready</strong></div>
-                <div class="profile-item"><span class="p-lbl" data-translate="p_notice">Delivery Notice</span> <strong class="p-val" id="success-delivery-notice">--</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_lead">Lead ID</span> <strong class="p-val" id="success-lead-id">20678</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_amount">Approved Loan Amount</span> <strong class="p-val" id="success-loan-amount">5,000,000 MNT</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_emi">Monthly Installment (EMI)</span> <strong class="p-val highlight-gold" id="success-loan-emi">459,444 MNT</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_account">Repayment Account</span> <strong class="p-val" id="success-account-num">5001234567</strong></div>
+                <div class="profile-item"><span class="p-lbl" data-translate="p_status">Disbursal Status</span> <strong class="p-val text-green" id="success-disbursal-status" data-translate="p_status_val">Disbursed Successfully</strong></div>
               </div>
             </div>
             
@@ -1003,7 +968,7 @@
             
             <div class="success-actions-row">
               <button type="button" class="btn btn-primary" id="btn-download-kit" data-translate="btn_kit">📥 Welcome Kit</button>
-              <button type="button" class="btn btn-secondary" id="btn-fund-account" data-translate="btn_fund">💳 Fund Account</button>
+              <button type="button" class="btn btn-secondary" id="btn-fund-account" data-translate="btn_fund">📊 View Loan Details</button>
             </div>
           </div>
         </section>
